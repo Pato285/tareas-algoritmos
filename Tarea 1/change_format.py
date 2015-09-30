@@ -26,7 +26,8 @@ def process(book):
 
 	# Now remove all things not necesary
 	my_string = FILTERPATTERN.split(my_buffer)
-	my_string = " ".join(my_string)
+	my_string = "".join(my_string)
+	print my_string
 
 	my_string = my_string.lower()
 
