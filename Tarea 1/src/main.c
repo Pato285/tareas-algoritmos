@@ -122,9 +122,68 @@ void runTest(char *algorithm, char *dataset, FILE *f,TestedFunction test){
 /*==============================================*/
 
 /*these are the actual implementations of the algorithms*/
-void funBF(char *text, char *pattern, int *answer){}
-void funKMP(char *text, char *pattern, int *answer){}
-void funBMH(char *text, char *pattern, int *answer){}
+void funBF(char *text, char *pattern, int *answer){
+  /*TODO: Confimr its working*/
+  for (size_t i = 0; i < text_length+1-pattern_length; i++) {
+    for (size_t j = 0; j < pattern_length; j++) {
+      if (!compareCharacters(text_buffer[i+j],pattern_buffer[j])) break;
+      if (j==pattern_length-1) *answer = i+1;
+    }
+  }
+}
+
+void funKMP(char *text, char *pattern, int *answer){
+  /*TODO: REQUIERES CHECKING CAUSES A SEGFAULT AT PATTERN STEP
+  char f[pattern_length];
+  int j,i;
+  f[0] = 0;
+  j = 0;
+  while (j<pattern_length) {
+    i = f[j];
+    while (i>0 && !compareCharacters(pattern_buffer[i],pattern_buffer[j])) {
+      i = f[i];
+    }
+    if(compareCharacters(pattern_buffer[i],pattern_buffer[j])) f[j] = i;
+    else f[j] = 0;
+    j++;
+  }
+  printf("hello\n");
+  i = j = 0;
+  while (i<text_length) {
+    while (j>0 && !compareCharacters(text_buffer[i],pattern_buffer[j])) {
+      j = f[j];
+    }
+    if (compareCharacters(text_buffer[i],pattern_buffer[j])) j++;
+    if (j==pattern_length){
+      i = i-j+1;
+      *answer = i+1;
+      printf("%i,\n",i+1 );
+      j = 0;
+    }
+    i++;
+  }
+  printf("\n");*/
+}
+
+void funBMH(char *text, char *pattern, int *answer){
+  /*TODO: Check if it working*/
+  int i,j;
+  i = j = pattern_length;
+  while (i<=text_length) {
+    if(j==0){
+      *answer = i-pattern_length+1;
+      printf("%d,",i-pattern_length+1);
+      j = pattern_length;
+      i++;
+    }
+    else if (compareCharacters(text_buffer[i-(pattern_length-j)],pattern_buffer[j])) j--;
+    else {
+      i = i+(pattern_length- (strrchr(pattern_buffer,text_buffer[i])-pattern_buffer) +1);
+      j = pattern_length;
+    }
+  }
+  printf("\n");
+}
 
 /*==============================================*/
 
@@ -151,10 +210,10 @@ int main(int argc, char const *argv[]){
   runTest("BF","dataset/RDNA.txt",f,&funBF);
   runTest("KMP","dataset/RDNA.txt",f,&funKMP);
   runTest("BMH","dataset/RDNA.txt",f,&funBMH);*/
-  /*---SYNTH DNA---*/
-  runTest("BF","dataset/SDNA.txt",f,&funBF);/*
-  runTest("KMP","dataset/SDNA.txt",f,&funKMP);
-  runTest("BMH","dataset/SDNA.txt",f,&funBMH);*/
+  /*---SYNTH DNA---*//*
+  runTest("BF","dataset/SDNA.txt",f,&funBF);
+  runTest("KMP","dataset/SDNA.txt",f,&funKMP);*/
+  runTest("BMH","dataset/SDNA.txt",f,&funBMH);
   /*---REAL LNG---*//*
   runTest("BF","dataset/RLNG.txt",f,&funBF);
   runTest("KMP","dataset/RLNG.txt",f,&funKMP);
