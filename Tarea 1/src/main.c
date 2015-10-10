@@ -39,6 +39,7 @@ int loadBuffer(char *filename,char* buffer){
     fclose(in);
     exit(1);
   }
+  if (read!=MAX_TEXT_SIZE) printf("Warning: there are only %zd characters in %s.\n",read,filename);
   for (size_t i = read; i <= MAX_TEXT_SIZE+1; i++) {
     buffer[i] = 0;
   }
