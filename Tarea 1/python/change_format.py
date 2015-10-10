@@ -13,7 +13,8 @@
 import re
 import sys
 
-FILTERPATTERN = re.compile("[^a-zA-ZàèìòùáéíóúÀÈÌÒÙÁÉÍÓÚäëïöüÄËÏÖÜÑñ]")
+#FILTERPATTERN = re.compile("[^a-zA-ZàèìòùáéíóúÀÈÌÒÙÁÉÍÓÚäëïöüÄËÏÖÜÑñ]")
+FILTERPATTERN = re.compile("[^a-zA-Z\ ]")
 
 def process(book):
 	a = open(book,"r")
@@ -21,19 +22,25 @@ def process(book):
 
 	my_buffer = ""
 	for line in a:
-		my_buffer += line
+#		print len(my_buffer)
+		if len(my_buffer)+len(line)>=1000000:
+			#print 1000000-len(my_buffer)
+			my_buffer += line[:1000000-len(my_buffer)]
+			break
+		else:
+			my_buffer += line
 	a.close()
 
 	# Now remove all things not necesary
 	my_string = FILTERPATTERN.split(my_buffer)
 	my_string = "".join(my_string)
-	print my_string
+	#print my_string
 
 	my_string = my_string.lower()
 
-	my_string = re.sub(r"\s+", " ", my_string)
+	my_string = re.sub(r"\s+", " ", my_string)[:1000000]
 
-	b = open(book,"w")
+	b = open("cf-"+book,"w")
 	paso = len(my_string)/50
 	for i in range(paso):
 		b.write(my_string[50*i:(i+1)*50])
