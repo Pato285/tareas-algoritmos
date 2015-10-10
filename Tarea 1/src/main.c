@@ -3,17 +3,45 @@
 #include <string.h>
 #include <time.h>
 
-int MAX_TESTS = 1;
+#define MAX_TESTS 1
+#define MIN_PAT_EXP 2
+#define MAX_PAT_EXP 7
+#define MAX_TEXT_SIZE 1000000
 
 /*==============================================*/
 
 FILE *openLog(const char* name){
   FILE *f = fopen(name, "w");
   if (f == NULL){
-      printf("Error opening file!\n");
+      printf("Error opening file!: %s\n",name);
       exit(1);
   }
   return f;
+}
+
+/*==============================================*/
+
+void loadBuffer(char *filename,char* buffer){
+  FILE *in;
+  size_t read;
+  in = fopen(filename, "r");
+  if (in == NULL){
+    printf("Error opening file!: %s\n",filename);
+    exit(1);
+  }
+
+  /*copy to buffer*/
+  read = fread(buffer, 1, MAX_TEXT_SIZE, in);
+  if (ferror(in)){
+    printf ("Error reading %s\n",filename);
+    fclose(in);
+    exit(1);
+  }
+  for (size_t i = read; i <= MAX_TEXT_SIZE+1; i++) {
+    buffer[i] = 0;
+  }
+
+  fclose(in);
 }
 
 /*==============================================*/
@@ -32,10 +60,11 @@ void configureTest(char *algorithm,char *dataset){
   test_algorithm = algorithm;
   test_dataset = dataset;
   /*open the dataset and load to memory*/
+  loadBuffer(dataset,text_buffer);
 }
 
 void choosePattern(int i){
-  pattern_length = 1<<(i-1);
+  pattern_length = 1<<i;
   /*load the pattern to buffer*/
 }
 
@@ -57,7 +86,7 @@ void registerTest(FILE *log){
 
   /*write down the relevant data on log*/
   /* ALGORITHM | DATASET | PATTERN LENGTH | ITERATION | TIME | COMPARISON */
-  fprintf(log,"%s\t%s\t%i\t%i\t%f\t%i\n",test_algorithm,test_dataset,pattern_length,iteration,time_spent,comparison_counter);
+  fprintf(log,"%s\t%s\t%i\t%i\t%f\t%i\n",test_algorithm,test_dataset+8,pattern_length,iteration,time_spent,comparison_counter);
 }
 
 typedef void (*TestedFunction)(char*, char*, int*);
@@ -65,7 +94,7 @@ typedef void (*TestedFunction)(char*, char*, int*);
 void runTest(char *algorithm, char *dataset, FILE *f,TestedFunction test){
   int *answer;
   configureTest(algorithm,dataset);
-  for (size_t j = 2; j < 7; j++) {
+  for (size_t j = MIN_PAT_EXP; j <= MAX_PAT_EXP; j++) {
     choosePattern(j);
     for (size_t i = 0; i < MAX_TESTS; i++) {
       beginTest();
@@ -90,28 +119,38 @@ void funBMH(char *text, char *pattern, int *answer){}
 int main(int argc, char const *argv[]){
   char* file_name, test_name;
   FILE *f;
+
+  /*Allocate ONCE the text working buffer*/
+  text_buffer = (char*) malloc(sizeof(char)*(MAX_TEXT_SIZE+1));
+  if (text_buffer == NULL) {printf("Failed to allocate text memory!\n");exit(2);}
+  pattern_buffer = (char*) malloc(sizeof(char)*((1<<MAX_PAT_EXP)+1));
+  if (pattern_buffer == NULL) {printf("Failed to allocate pattern memory!\n");exit(2);}
+
   f = openLog("results.csv");
   fprintf(f, "ALG\tDATA SET\tPLEN\tIT\tEJECTIME\tNCOM\n");
   /*---BINARY---*/
-  runTest("BF","BINA.txt",f,&funBF);
-  runTest("KMP","BINA.txt",f,&funKMP);
-  runTest("BMH","BINA.txt",f,&funBMH);
+  runTest("BF","dataset/BINA.txt",f,&funBF);
+  runTest("KMP","dataset/BINA.txt",f,&funKMP);
+  runTest("BMH","dataset/BINA.txt",f,&funBMH);
   /*---REAL DNA---*/
-  runTest("BF","RDNA.txt",f,&funBF);
-  runTest("KMP","RDNA.txt",f,&funKMP);
-  runTest("BMH","RDNA.txt",f,&funBMH);
+  runTest("BF","dataset/RDNA.txt",f,&funBF);
+  runTest("KMP","dataset/RDNA.txt",f,&funKMP);
+  runTest("BMH","dataset/RDNA.txt",f,&funBMH);
   /*---SYNTH DNA---*/
-  runTest("BF","SDNA.txt",f,&funBF);
-  runTest("KMP","SDNA.txt",f,&funKMP);
-  runTest("BMH","SDNA.txt",f,&funBMH);
+  runTest("BF","dataset/SDNA.txt",f,&funBF);
+  runTest("KMP","dataset/SDNA.txt",f,&funKMP);
+  runTest("BMH","dataset/SDNA.txt",f,&funBMH);
   /*---REAL LNG---*/
-  runTest("BF","RLNG.txt",f,&funBF);
-  runTest("KMP","RLNG.txt",f,&funKMP);
-  runTest("BMH","RLNG.txt",f,&funBMH);
+  runTest("BF","dataset/RLNG.txt",f,&funBF);
+  runTest("KMP","dataset/RLNG.txt",f,&funKMP);
+  runTest("BMH","dataset/RLNG.txt",f,&funBMH);
   /*---SYNTH LNG---*/
-  runTest("BF","SLNG.txt",f,&funBF);
-  runTest("KMP","SLNG.txt",f,&funKMP);
-  runTest("BMH","SLNG.txt",f,&funBMH);
+  runTest("BF","dataset/SLNG.txt",f,&funBF);
+  runTest("KMP","dataset/SLNG.txt",f,&funKMP);
+  runTest("BMH","dataset/SLNG.txt",f,&funBMH);
 
   fclose(f);
+
+  free(text_buffer);
+  free(pattern_buffer);
 }
