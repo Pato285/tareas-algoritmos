@@ -19,8 +19,13 @@ FILE *openLog(const char* name){
 /*==============================================*/
 
 int comparison_counter, start_time, end_time, iteration, pattern_length;
+/*filenames and algorithm name*/
 char *test_algorithm;
 char *test_dataset;
+
+/*actual text and pattern buffers*/
+char *text_buffer;
+char *pattern_buffer;
 
 void configureTest(char *algorithm,char *dataset){
   iteration = 0;
@@ -31,6 +36,7 @@ void configureTest(char *algorithm,char *dataset){
 
 void choosePattern(int i){
   pattern_length = 1<<(i-1);
+  /*load the pattern to buffer*/
 }
 
 void beginTest(){
@@ -51,12 +57,13 @@ void registerTest(FILE *log){
 
   /*write down the relevant data on log*/
   /* ALGORITHM | DATASET | PATTERN LENGTH | ITERATION | TIME | COMPARISON */
-  fprintf(log,"%s, %s, %i, %i, %f, %i\n",test_algorithm,test_dataset,pattern_length,iteration,time_spent,comparison_counter);
+  fprintf(log,"%s\t%s\t%i\t%i\t%f\t%i\n",test_algorithm,test_dataset,pattern_length,iteration,time_spent,comparison_counter);
 }
 
-/*==============================================*/
+typedef void (*TestedFunction)(char*, char*, int*);
 
-void runTest(char *algorithm, char *dataset, FILE *f){
+void runTest(char *algorithm, char *dataset, FILE *f,TestedFunction test){
+  int *answer;
   configureTest(algorithm,dataset);
   for (size_t j = 2; j < 7; j++) {
     choosePattern(j);
@@ -64,37 +71,47 @@ void runTest(char *algorithm, char *dataset, FILE *f){
       beginTest();
 
       /*execute tested algorithm*/
+      test(text_buffer,pattern_buffer,answer);
 
       registerTest(f);
     }
   }
 }
 
+/*==============================================*/
+
+/*these are the actual implementations of the algorithms*/
+void funBF(char *text, char *pattern, int *answer){}
+void funKMP(char *text, char *pattern, int *answer){}
+void funBMH(char *text, char *pattern, int *answer){}
+
+/*==============================================*/
+
 int main(int argc, char const *argv[]){
   char* file_name, test_name;
   FILE *f;
   f = openLog("results.csv");
-
+  fprintf(f, "ALG\tDATA SET\tPLEN\tIT\tEJECTIME\tNCOM\n");
   /*---BINARY---*/
-  runTest("Naive","BIN.txt",f);
-  runTest("KMP","BIN.txt",f);
-  runTest("BMH","BIN.txt",f);
+  runTest("BF","BINA.txt",f,&funBF);
+  runTest("KMP","BINA.txt",f,&funKMP);
+  runTest("BMH","BINA.txt",f,&funBMH);
   /*---REAL DNA---*/
-  runTest("Naive","RDNA.txt",f);
-  runTest("KMP","RDNA.txt",f);
-  runTest("BMH","RDNA.txt",f);
+  runTest("BF","RDNA.txt",f,&funBF);
+  runTest("KMP","RDNA.txt",f,&funKMP);
+  runTest("BMH","RDNA.txt",f,&funBMH);
   /*---SYNTH DNA---*/
-  runTest("Naive","SDNA.txt",f);
-  runTest("KMP","SDNA.txt",f);
-  runTest("BMH","SDNA.txt",f);
+  runTest("BF","SDNA.txt",f,&funBF);
+  runTest("KMP","SDNA.txt",f,&funKMP);
+  runTest("BMH","SDNA.txt",f,&funBMH);
   /*---REAL LNG---*/
-  runTest("Naive","RLNG.txt",f);
-  runTest("KMP","RLNG.txt",f);
-  runTest("BMH","RLNG.txt",f);
+  runTest("BF","RLNG.txt",f,&funBF);
+  runTest("KMP","RLNG.txt",f,&funKMP);
+  runTest("BMH","RLNG.txt",f,&funBMH);
   /*---SYNTH LNG---*/
-  runTest("Naive","SLNG.txt",f);
-  runTest("KMP","SLNG.txt",f);
-  runTest("BMH","SLNG.txt",f);
+  runTest("BF","SLNG.txt",f,&funBF);
+  runTest("KMP","SLNG.txt",f,&funKMP);
+  runTest("BMH","SLNG.txt",f,&funBMH);
 
   fclose(f);
 }
