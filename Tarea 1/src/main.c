@@ -3,7 +3,7 @@
 #include <string.h>
 #include <time.h>
 
-#define MAX_TESTS 1
+#define MAX_TESTS 3
 #define MIN_PAT_EXP 2
 #define MAX_PAT_EXP 7
 #define MAX_TEXT_SIZE 1000000
@@ -107,8 +107,8 @@ void runTest(char *algorithm, char *dataset, FILE *f,TestedFunction test){
   int *answer;
   configureTest(algorithm,dataset);
   for (size_t j = MIN_PAT_EXP; j <= MAX_PAT_EXP; j++) {
-    choosePattern(j);
     for (size_t i = 0; i < MAX_TESTS; i++) {
+      choosePattern(j);
       beginTest();
 
       /*execute tested algorithm*/
@@ -202,24 +202,24 @@ int main(int argc, char const *argv[]){
 
   f = openLog("results.csv");
   fprintf(f, "ALG\tDATA SET\tPLEN\tIT\tEJECTIME\tNCOM\n");
-  /*---BINARY---*//*
-  runTest("BF","dataset/BINA.txt",f,&funBF);
+  /*---BINARY---*/
+  runTest("BF","dataset/BINA.txt",f,&funBF);/*
   runTest("KMP","dataset/BINA.txt",f,&funKMP);
   runTest("BMH","dataset/BINA.txt",f,&funBMH);*/
-  /*---REAL DNA---*//*
-  runTest("BF","dataset/RDNA.txt",f,&funBF);
+  /*---REAL DNA---*/
+  runTest("BF","dataset/RDNA.txt",f,&funBF);/*
   runTest("KMP","dataset/RDNA.txt",f,&funKMP);
   runTest("BMH","dataset/RDNA.txt",f,&funBMH);*/
-  /*---SYNTH DNA---*//*
-  runTest("BF","dataset/SDNA.txt",f,&funBF);
-  runTest("KMP","dataset/SDNA.txt",f,&funKMP);*/
-  runTest("BMH","dataset/SDNA.txt",f,&funBMH);
-  /*---REAL LNG---*//*
-  runTest("BF","dataset/RLNG.txt",f,&funBF);
+  /*---SYNTH DNA---*/
+  runTest("BF","dataset/SDNA.txt",f,&funBF);/*
+  runTest("KMP","dataset/SDNA.txt",f,&funKMP);
+  runTest("BMH","dataset/SDNA.txt",f,&funBMH);*/
+  /*---REAL LNG---*/
+  runTest("BF","dataset/RLNG.txt",f,&funBF);/*
   runTest("KMP","dataset/RLNG.txt",f,&funKMP);
   runTest("BMH","dataset/RLNG.txt",f,&funBMH);*/
-  /*---SYNTH LNG---*//*
-  runTest("BF","dataset/SLNG.txt",f,&funBF);
+  /*---SYNTH LNG---*/
+  runTest("BF","dataset/SLNG.txt",f,&funBF);/*
   runTest("KMP","dataset/SLNG.txt",f,&funKMP);
   runTest("BMH","dataset/SLNG.txt",f,&funBMH);*/
 
