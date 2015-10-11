@@ -168,6 +168,11 @@ void funKMP(char *text, int n, char *pattern, int m, int *answer){
   printf("\n");
 }
 
+int lastIndexOf(char *string, char c){
+  char *aux = strrchr(string,c);
+  return aux==NULL? -1: aux-string+1;
+}
+
 void funBMH(char *text, int n, char *pattern, int m, int *answer){
   /*TODO: Check if it working*/
   int i,j;
@@ -180,9 +185,9 @@ void funBMH(char *text, int n, char *pattern, int m, int *answer){
       j = m;
       i++;
     }
-    else if (compareCharacters(text[i-(m-j)],pattern[j])) j--;
+    else if (compareCharacters(text[i-m+j],pattern[j])) j--;
     else {
-      i = i+(m- (strrchr(pattern,text[i])-pattern_buffer) +1);
+      i = i+(m-lastIndexOf(pattern,text[i])+1);
       j = m;
     }
   }
