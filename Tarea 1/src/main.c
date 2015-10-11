@@ -3,7 +3,7 @@
 #include <string.h>
 #include <time.h>
 
-#define MAX_TESTS 500
+#define MAX_TESTS 10000
 #define MIN_PAT_EXP 2
 #define MAX_PAT_EXP 7
 #define MAX_TEXT_SIZE 1000000
@@ -59,7 +59,6 @@ char *text_buffer;
 char *pattern_buffer;
 
 void configureTest(char *algorithm,char *dataset){
-  iteration = 0;
   test_algorithm = algorithm;
   test_dataset = dataset;
   /*open the dataset and load to memory*/
@@ -107,7 +106,7 @@ void runTest(char *algorithm, char *dataset, FILE *f,TestedFunction test){
   int answer;
   configureTest(algorithm,dataset);
   for (size_t j = MIN_PAT_EXP; j <= MAX_PAT_EXP; j++) {
-    for (size_t i = 0; i < MAX_TESTS; i++) {
+    for (iteration = 0; iteration < MAX_TESTS; iteration++) {
       choosePattern(j);
       beginTest();
 
