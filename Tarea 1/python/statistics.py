@@ -1,33 +1,47 @@
 import math
+import sys
 
-a = open("results.csv",'r')
+if __name__ == '__main__':
+    if len(sys.argv)!=3: raise Exception("Uso: statistics.py <input> <output>")
+    a = open(sys.argv[1],'r')
 
-table = {}
-for line in a:
-    if line=="ALG\tDATA SET\tPLEN\tIT\tEJECTIME\tNCOM\n": continue;
+    table = {}
+    for line in a:
+        if line=="ALG\tDATA SET\tPLEN\tIT\tEJECTIME\tNCOM\n": continue;
 
-    row = line[:-1].split('\t')
-    #ALG | DATASET | PATLEN | IT | EJECTIME | COMP
-    ALG = row[0]
-    DATASET = row[1]
-    PATLEN = int(row[2])
-    IT = int(row[3])
-    EJECTIME = float(row[4])
-    COMP = int(row[5])
+        row = line[:-1].split('\t')
+        #ALG | DATASET | PATLEN | IT | EJECTIME | COMP
+        ALG = row[0]
+        DATASET = row[1]
+        PATLEN = int(row[2])
+        IT = int(row[3])
+        EJECTIME = float(row[4])
+        COMP = int(row[5])
 
-    key = (ALG,DATASET,PATLEN)
-    value = (IT,EJECTIME,COMP)
-    if table.has_key(key):
-        table[key].append(value)
-    else:
-        table[key] = [value]
+        key = (ALG,DATASET,PATLEN)
+        value = (IT,EJECTIME,COMP)
+        if table.has_key(key):
+            table[key].append(value)
+        else:
+            table[key] = [value]
+    a.close()
 
-#print map(lambda x: len(table[x]),table)
-for key in table:
-    n = len(table[key][1])
-    TIME_avg = sum(table[key][1])/n
-    TIME_var = (sum(map(lambda x:x[1]*x[1],table[key]))-n*TIME_avg*TIME_avg)/(n-1)
-    #var_estimador = math.sqrt(TIME_var/n)
-    print key,TIME_avg,TIME_var
+    a = open(sys.argv[2],'w')
+    a.write('ALG\tDATA SET\tPLEN\tAVG T\tSTDEV T\tT ERR\tT CONF INT\tAVG C\tSTDEV C\tC ERR\tC CONF INT\n')
 
-a.close()
+    for key in sorted(table):
+        (ALG,DATASET,PATLEN) = key
+
+        (it_list,time_list,comp_list) = zip(*table[key])
+        n = len(it_list)
+
+        TIME_avg = sum(time_list)/n
+        TIME_stdev = math.sqrt(sum(map(lambda x: (x-TIME_avg)**2,time_list))/n)
+        TIME_error = 1.96*TIME_stdev/math.sqrt(n)
+
+        COMP_avg = sum(comp_list)/n
+        COMP_stdev = math.sqrt(sum(map(lambda x: (x-COMP_avg)**2,comp_list))/n)
+        COMP_error = 1.96*COMP_stdev/math.sqrt(n)
+
+        a.write('%s\t%s\t%s\t%f\t%f\t%f\t[%f to %f]\t%f\t%f\t%f\t[%f to %f]\n' % (ALG,DATASET,PATLEN,TIME_avg,TIME_stdev,TIME_error,TIME_avg-TIME_error,TIME_avg+TIME_error,COMP_avg,COMP_stdev,COMP_error,COMP_avg-COMP_error,COMP_avg+COMP_error))
+    a.close()
