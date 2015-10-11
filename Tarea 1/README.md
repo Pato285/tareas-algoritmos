@@ -19,7 +19,12 @@ Se trabaja con los siguientes conjuntos de datos.
 La tarea fue probada en Ubuntu 15.04.
 Desde terminal ejecutar:
 ```
-make && ./main
+make && ./main <output file name> <number of test>
 ```
 
-Los datos generados se guardarán en `results.csv`
+## Analizar tarea
+===
+Para determinar los intervalos de confianza de archivos muy extensos esta el script de apoyo `statistics.py`.
+```
+python python/statistics.py <input file name> <output file name>
+```

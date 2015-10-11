@@ -3,12 +3,13 @@
 #include <string.h>
 #include <time.h>
 
-#define MAX_TESTS 10000
 #define MIN_PAT_EXP 2
 #define MAX_PAT_EXP 7
 #define MAX_TEXT_SIZE 1000000
 
 #define MAX(a,b) (((a)>(b))?(a):(b))
+
+int MAX_TESTS;
 
 /*==============================================*/
 
@@ -195,8 +196,14 @@ void funBMH(char *text, int n, char *pattern, int m, int *answer){
 /*==============================================*/
 
 int main(int argc, char const *argv[]){
-  char* file_name, test_name;
   FILE *f;
+
+  if (argc!=3) {
+    printf("Use: ./main <output file name> <number of test>\n");
+    exit(1);
+  }
+
+  MAX_TESTS = atoi(argv[2]);
 
   /*---DEBUGING---*/
   /*int answer;
@@ -216,7 +223,7 @@ int main(int argc, char const *argv[]){
   pattern_buffer = (char*) malloc(sizeof(char)*((1<<MAX_PAT_EXP)+1));
   if (pattern_buffer == NULL) {printf("Failed to allocate pattern memory!\n");exit(2);}
 
-  f = openLog("results.csv");
+  f = openLog(argv[1]);
   fprintf(f, "ALG\tDATA SET\tPLEN\tIT\tEJECTIME\tNCOM\n");
   /*---BINARY---*/
   runTest("BF","dataset/BINA.txt",f,&funBF);
