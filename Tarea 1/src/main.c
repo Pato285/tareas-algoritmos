@@ -3,7 +3,7 @@
 #include <string.h>
 #include <time.h>
 
-#define MAX_TESTS 3
+#define MAX_TESTS 500
 #define MIN_PAT_EXP 2
 #define MAX_PAT_EXP 7
 #define MAX_TEXT_SIZE 1000000
@@ -124,22 +124,19 @@ void runTest(char *algorithm, char *dataset, FILE *f,TestedFunction test){
 /*these are the actual implementations of the algorithms*/
 void funBF(char *text, int n, char *pattern, int m, int *answer){
   size_t j;
-  /*TODO: Confirm its working*/
-  printf("BF:\t");
+  /*printf("BF:\t");*/
   for (size_t i = 0; i < n-m; i++) {
     j = 0;
     while (j < m && compareCharacters(text[i+j],pattern[j])) j++;
-    if (j==m) {*answer = i;printf("%zd,",i );}
+    if (j==m) *answer = i;/*printf("%zd,",i );*/
   }
-  printf("\n");
+  /*printf("\n");*/
 }
 
 void funKMP(char *text, int n, char *pattern, int m, int *answer){
-  /*TODO: REQUIERES CHECKING CAUSES A SEGFAULT AT PATTERN STEP*/
   char f[m];
   int j,i;
-  printf("KMP:\t");
-  /*f[0] = 0;*/
+  /*printf("KMP:\t");*/
   memset(f,0,sizeof(f));
   j = 0;
   while (j<m) {
@@ -151,7 +148,6 @@ void funKMP(char *text, int n, char *pattern, int m, int *answer){
     else f[j] = 0;
     j++;
   }
-  /*printf("hello\n");*/
   i = j = 0;
   while (i<n) {
     while (j>0 && !compareCharacters(text[i],pattern[j])) {
@@ -161,18 +157,17 @@ void funKMP(char *text, int n, char *pattern, int m, int *answer){
     if (j==m){
       i = i-j+1;
       *answer = i;
-      printf("%i,",i );
+      /*printf("%i,",i );*/
       j = 0;
     }
     i++;
   }
-  printf("\n");
+  /*printf("\n");*/
 }
 
 
 
 void funBMH(char *text, int n, char *pattern, int m, int *answer){
-  /*TODO: Create next function*/
   int i,j;
 
   int next[128]={[0 ... 127] = m};
@@ -180,12 +175,12 @@ void funBMH(char *text, int n, char *pattern, int m, int *answer){
     next[pattern[i]]=m-i-1;
   }
 
-  printf("BMH:\t");
+  /*printf("BMH:\t");*/
   i = j = m-1;
   while (i<n) {
     if(j==-1){
       *answer = i-m+1;
-      printf("%d,",i-m+1);
+      /*printf("%d,",i-m+1);*/
       j = m-1;
       i++;
     }
@@ -195,7 +190,7 @@ void funBMH(char *text, int n, char *pattern, int m, int *answer){
       j = m-1;
     }
   }
-  printf("\n");
+  /*printf("\n");*/
 }
 
 /*==============================================*/
@@ -205,12 +200,12 @@ int main(int argc, char const *argv[]){
   FILE *f;
 
   /*---DEBUGING---*/
-  int answer;
-  printf("correct answer: 0,5,20,29,41\n");
-  funBF("tres tristes tigres tragaban trigo en un trigal",47,"tr",2,&answer);
-  funKMP("tres tristes tigres tragaban trigo en un trigal",47,"tr",2,&answer);
-  funBMH("tres tristes tigres tragaban trigo en un trigal",47,"tr",2,&answer);
-  exit(0);
+  /*int answer;
+    printf("correct answer: 0,5,20,29,41\n");
+    funBF("tres tristes tigres tragaban trigo en un trigal",47,"tr",2,&answer);
+    funKMP("tres tristes tigres tragaban trigo en un trigal",47,"tr",2,&answer);
+    funBMH("tres tristes tigres tragaban trigo en un trigal",47,"tr",2,&answer);
+    exit(0);*/
   /*--------------*/
 
   /*setting the seed for random*/
@@ -226,24 +221,24 @@ int main(int argc, char const *argv[]){
   fprintf(f, "ALG\tDATA SET\tPLEN\tIT\tEJECTIME\tNCOM\n");
   /*---BINARY---*/
   runTest("BF","dataset/BINA.txt",f,&funBF);
-  runTest("KMP","dataset/BINA.txt",f,&funKMP);/*
-  runTest("BMH","dataset/BINA.txt",f,&funBMH);*/
+  runTest("KMP","dataset/BINA.txt",f,&funKMP);
+  runTest("BMH","dataset/BINA.txt",f,&funBMH);
   /*---REAL DNA---*/
   runTest("BF","dataset/RDNA.txt",f,&funBF);
-  runTest("KMP","dataset/RDNA.txt",f,&funKMP);/*
-  runTest("BMH","dataset/RDNA.txt",f,&funBMH);*/
+  runTest("KMP","dataset/RDNA.txt",f,&funKMP);
+  runTest("BMH","dataset/RDNA.txt",f,&funBMH);
   /*---SYNTH DNA---*/
   runTest("BF","dataset/SDNA.txt",f,&funBF);
-  runTest("KMP","dataset/SDNA.txt",f,&funKMP);/*
-  runTest("BMH","dataset/SDNA.txt",f,&funBMH);*/
+  runTest("KMP","dataset/SDNA.txt",f,&funKMP);
+  runTest("BMH","dataset/SDNA.txt",f,&funBMH);
   /*---REAL LNG---*/
   runTest("BF","dataset/RLNG.txt",f,&funBF);
-  runTest("KMP","dataset/RLNG.txt",f,&funKMP);/*
-  runTest("BMH","dataset/RLNG.txt",f,&funBMH);*/
+  runTest("KMP","dataset/RLNG.txt",f,&funKMP);
+  runTest("BMH","dataset/RLNG.txt",f,&funBMH);
   /*---SYNTH LNG---*/
   runTest("BF","dataset/SLNG.txt",f,&funBF);
-  runTest("KMP","dataset/SLNG.txt",f,&funKMP);/*
-  runTest("BMH","dataset/SLNG.txt",f,&funBMH);*/
+  runTest("KMP","dataset/SLNG.txt",f,&funKMP);
+  runTest("BMH","dataset/SLNG.txt",f,&funBMH);
 
   fclose(f);
 
