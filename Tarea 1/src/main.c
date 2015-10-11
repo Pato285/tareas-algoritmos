@@ -112,7 +112,7 @@ void runTest(char *algorithm, char *dataset, FILE *f,TestedFunction test){
       beginTest();
 
       /*execute tested algorithm*/
-      test(text_buffer,text_length,pattern_buffer,pattern_length,&answer);
+      (*test)(text_buffer,text_length,pattern_buffer,pattern_length,&answer);
 
       registerTest(f);
     }
@@ -139,7 +139,8 @@ void funKMP(char *text, int n, char *pattern, int m, int *answer){
   char f[m];
   int j,i;
   printf("KMP:\t");
-  f[0] = 0;
+  /*f[0] = 0;*/
+  memset(f,0,sizeof(f));
   j = 0;
   while (j<m) {
     i = f[j];
@@ -200,13 +201,13 @@ int main(int argc, char const *argv[]){
   char* file_name, test_name;
   FILE *f;
 
-  /*---DEBUGING---*/
+  /*---DEBUGING---*//*
   int answer;
   printf("correct answer: 0,5,20,29,41\n");
   funBF("tres tristes tigres tragaban trigo en un trigal",47,"tr",2,&answer);
   funKMP("tres tristes tigres tragaban trigo en un trigal",47,"tr",2,&answer);
   funBMH("tres tristes tigres tragaban trigo en un trigal",47,"tr",2,&answer);
-  exit(0);
+  exit(0);*/
   /*--------------*/
 
   /*setting the seed for random*/
@@ -221,24 +222,24 @@ int main(int argc, char const *argv[]){
   f = openLog("results.csv");
   fprintf(f, "ALG\tDATA SET\tPLEN\tIT\tEJECTIME\tNCOM\n");
   /*---BINARY---*/
-  runTest("BF","dataset/BINA.txt",f,&funBF);/*
-  runTest("KMP","dataset/BINA.txt",f,&funKMP);
+  runTest("BF","dataset/BINA.txt",f,&funBF);
+  runTest("KMP","dataset/BINA.txt",f,&funKMP);/*
   runTest("BMH","dataset/BINA.txt",f,&funBMH);*/
   /*---REAL DNA---*/
-  runTest("BF","dataset/RDNA.txt",f,&funBF);/*
-  runTest("KMP","dataset/RDNA.txt",f,&funKMP);
+  runTest("BF","dataset/RDNA.txt",f,&funBF);
+  runTest("KMP","dataset/RDNA.txt",f,&funKMP);/*
   runTest("BMH","dataset/RDNA.txt",f,&funBMH);*/
   /*---SYNTH DNA---*/
-  runTest("BF","dataset/SDNA.txt",f,&funBF);/*
-  runTest("KMP","dataset/SDNA.txt",f,&funKMP);
+  runTest("BF","dataset/SDNA.txt",f,&funBF);
+  runTest("KMP","dataset/SDNA.txt",f,&funKMP);/*
   runTest("BMH","dataset/SDNA.txt",f,&funBMH);*/
   /*---REAL LNG---*/
-  runTest("BF","dataset/RLNG.txt",f,&funBF);/*
-  runTest("KMP","dataset/RLNG.txt",f,&funKMP);
+  runTest("BF","dataset/RLNG.txt",f,&funBF);
+  runTest("KMP","dataset/RLNG.txt",f,&funKMP);/*
   runTest("BMH","dataset/RLNG.txt",f,&funBMH);*/
   /*---SYNTH LNG---*/
-  runTest("BF","dataset/SLNG.txt",f,&funBF);/*
-  runTest("KMP","dataset/SLNG.txt",f,&funKMP);
+  runTest("BF","dataset/SLNG.txt",f,&funBF);
+  runTest("KMP","dataset/SLNG.txt",f,&funKMP);/*
   runTest("BMH","dataset/SLNG.txt",f,&funBMH);*/
 
   fclose(f);
