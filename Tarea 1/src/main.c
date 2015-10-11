@@ -104,7 +104,7 @@ void registerTest(FILE *log){
 typedef void (*TestedFunction)(char*, char*, int*);
 
 void runTest(char *algorithm, char *dataset, FILE *f,TestedFunction test){
-  int *answer;
+  int answer;
   configureTest(algorithm,dataset);
   for (size_t j = MIN_PAT_EXP; j <= MAX_PAT_EXP; j++) {
     for (size_t i = 0; i < MAX_TESTS; i++) {
@@ -112,7 +112,7 @@ void runTest(char *algorithm, char *dataset, FILE *f,TestedFunction test){
       beginTest();
 
       /*execute tested algorithm*/
-      test(text_buffer,pattern_buffer,answer);
+      test(text_buffer,pattern_buffer,&answer);
 
       registerTest(f);
     }
@@ -123,19 +123,22 @@ void runTest(char *algorithm, char *dataset, FILE *f,TestedFunction test){
 
 /*these are the actual implementations of the algorithms*/
 void funBF(char *text, char *pattern, int *answer){
-  /*TODO: Confimr its working*/
+  /*TODO: Confirm its working*/
+  printf("BF:\t");
   for (size_t i = 0; i < text_length+1-pattern_length; i++) {
     for (size_t j = 0; j < pattern_length; j++) {
       if (!compareCharacters(text_buffer[i+j],pattern_buffer[j])) break;
-      if (j==pattern_length-1) *answer = i+1;
+      if (j==pattern_length-1) {*answer = i+1;printf("%zd,",i+1 );}
     }
   }
+  printf("\n");
 }
 
 void funKMP(char *text, char *pattern, int *answer){
-  /*TODO: REQUIERES CHECKING CAUSES A SEGFAULT AT PATTERN STEP
+  /*TODO: REQUIERES CHECKING CAUSES A SEGFAULT AT PATTERN STEP*/
   char f[pattern_length];
   int j,i;
+  printf("KMP:\t");
   f[0] = 0;
   j = 0;
   while (j<pattern_length) {
@@ -147,7 +150,7 @@ void funKMP(char *text, char *pattern, int *answer){
     else f[j] = 0;
     j++;
   }
-  printf("hello\n");
+  /*printf("hello\n");*/
   i = j = 0;
   while (i<text_length) {
     while (j>0 && !compareCharacters(text_buffer[i],pattern_buffer[j])) {
@@ -157,17 +160,18 @@ void funKMP(char *text, char *pattern, int *answer){
     if (j==pattern_length){
       i = i-j+1;
       *answer = i+1;
-      printf("%i,\n",i+1 );
+      printf("%i,",i+1 );
       j = 0;
     }
     i++;
   }
-  printf("\n");*/
+  printf("\n");
 }
 
 void funBMH(char *text, char *pattern, int *answer){
   /*TODO: Check if it working*/
   int i,j;
+  printf("BMH:\t");
   i = j = pattern_length;
   while (i<=text_length) {
     if(j==0){
@@ -190,6 +194,16 @@ void funBMH(char *text, char *pattern, int *answer){
 int main(int argc, char const *argv[]){
   char* file_name, test_name;
   FILE *f;
+
+  /*---DEBUGING---*/
+  int answer;
+  /*respuesta correcta:
+  0,5,20,29,41*/
+  funBF("tres tristes tigres tragaban trigo en un trigal","tr",&answer);
+  funKMP("tres tristes tigres tragaban trigo en un trigal","tr",&answer);
+  funBMH("tres tristes tigres tragaban trigo en un trigal","tr",&answer);
+  exit(0);
+  /*--------------*/
 
   /*setting the seed for random*/
   srand(time(NULL));
