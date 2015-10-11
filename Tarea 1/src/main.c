@@ -101,7 +101,7 @@ void registerTest(FILE *log){
   fprintf(log,"%s\t%s\t%i\t%i\t%f\t%i\n",test_algorithm,test_dataset+8,pattern_length,iteration,time_spent,comparison_counter);
 }
 
-typedef void (*TestedFunction)(char*, char*, int*);
+typedef void (*TestedFunction)(char*, int, char*, int, int*);
 
 void runTest(char *algorithm, char *dataset, FILE *f,TestedFunction test){
   int answer;
@@ -112,7 +112,7 @@ void runTest(char *algorithm, char *dataset, FILE *f,TestedFunction test){
       beginTest();
 
       /*execute tested algorithm*/
-      test(text_buffer,pattern_buffer,&answer);
+      test(text_buffer,text_length,pattern_buffer,pattern_length,&answer);
 
       registerTest(f);
     }
@@ -122,45 +122,45 @@ void runTest(char *algorithm, char *dataset, FILE *f,TestedFunction test){
 /*==============================================*/
 
 /*these are the actual implementations of the algorithms*/
-void funBF(char *text, char *pattern, int *answer){
+void funBF(char *text, int n, char *pattern, int m, int *answer){
+  size_t j;
   /*TODO: Confirm its working*/
   printf("BF:\t");
-  for (size_t i = 0; i < text_length+1-pattern_length; i++) {
-    for (size_t j = 0; j < pattern_length; j++) {
-      if (!compareCharacters(text_buffer[i+j],pattern_buffer[j])) break;
-      if (j==pattern_length-1) {*answer = i+1;printf("%zd,",i+1 );}
-    }
+  for (size_t i = 0; i < n-m; i++) {
+    j = 0;
+    while (j < m && compareCharacters(text[i+j],pattern[j])) j++;
+    if (j==m) {*answer = i;printf("%zd,",i );}
   }
   printf("\n");
 }
 
-void funKMP(char *text, char *pattern, int *answer){
+void funKMP(char *text, int n, char *pattern, int m, int *answer){
   /*TODO: REQUIERES CHECKING CAUSES A SEGFAULT AT PATTERN STEP*/
-  char f[pattern_length];
+  char f[m];
   int j,i;
   printf("KMP:\t");
   f[0] = 0;
   j = 0;
-  while (j<pattern_length) {
+  while (j<m) {
     i = f[j];
-    while (i>0 && !compareCharacters(pattern_buffer[i],pattern_buffer[j])) {
+    while (i>0 && !compareCharacters(pattern[i],pattern[j])) {
       i = f[i];
     }
-    if(compareCharacters(pattern_buffer[i],pattern_buffer[j])) f[j] = i;
+    if(compareCharacters(pattern[i],pattern[j])) f[j] = i;
     else f[j] = 0;
     j++;
   }
   /*printf("hello\n");*/
   i = j = 0;
-  while (i<text_length) {
-    while (j>0 && !compareCharacters(text_buffer[i],pattern_buffer[j])) {
+  while (i<n) {
+    while (j>0 && !compareCharacters(text[i],pattern[j])) {
       j = f[j];
     }
-    if (compareCharacters(text_buffer[i],pattern_buffer[j])) j++;
-    if (j==pattern_length){
+    if (compareCharacters(text[i],pattern[j])) j++;
+    if (j==m){
       i = i-j+1;
-      *answer = i+1;
-      printf("%i,",i+1 );
+      *answer = i;
+      printf("%i,",i );
       j = 0;
     }
     i++;
@@ -168,22 +168,22 @@ void funKMP(char *text, char *pattern, int *answer){
   printf("\n");
 }
 
-void funBMH(char *text, char *pattern, int *answer){
+void funBMH(char *text, int n, char *pattern, int m, int *answer){
   /*TODO: Check if it working*/
   int i,j;
   printf("BMH:\t");
-  i = j = pattern_length;
-  while (i<=text_length) {
+  i = j = m;
+  while (i<=n) {
     if(j==0){
-      *answer = i-pattern_length+1;
-      printf("%d,",i-pattern_length+1);
-      j = pattern_length;
+      *answer = i-m+1;
+      printf("%d,",i-m+1);
+      j = m;
       i++;
     }
-    else if (compareCharacters(text_buffer[i-(pattern_length-j)],pattern_buffer[j])) j--;
+    else if (compareCharacters(text[i-(m-j)],pattern[j])) j--;
     else {
-      i = i+(pattern_length- (strrchr(pattern_buffer,text_buffer[i])-pattern_buffer) +1);
-      j = pattern_length;
+      i = i+(m- (strrchr(pattern,text[i])-pattern_buffer) +1);
+      j = m;
     }
   }
   printf("\n");
@@ -197,11 +197,10 @@ int main(int argc, char const *argv[]){
 
   /*---DEBUGING---*/
   int answer;
-  /*respuesta correcta:
-  0,5,20,29,41*/
-  funBF("tres tristes tigres tragaban trigo en un trigal","tr",&answer);
-  funKMP("tres tristes tigres tragaban trigo en un trigal","tr",&answer);
-  funBMH("tres tristes tigres tragaban trigo en un trigal","tr",&answer);
+  printf("correct answer: 0,5,20,29,41\n");
+  funBF("tres tristes tigres tragaban trigo en un trigal",47,"tr",2,&answer);
+  funKMP("tres tristes tigres tragaban trigo en un trigal",47,"tr",2,&answer);
+  funBMH("tres tristes tigres tragaban trigo en un trigal",47,"tr",2,&answer);
   exit(0);
   /*--------------*/
 
