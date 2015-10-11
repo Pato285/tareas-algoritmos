@@ -169,21 +169,21 @@ void funKMP(char *text, int n, char *pattern, int m, int *answer){
 }
 
 void funBMH(char *text, int n, char *pattern, int m, int *answer){
-  /*TODO: Check if it working*/
+  /*TODO: Create next function*/
   int i,j;
   printf("BMH:\t");
-  i = j = m;
-  while (i<=n) {
-    if(j==0){
+  i = j = m-1;
+  while (i<n) {
+    if(j==-1){
       *answer = i-m+1;
       printf("%d,",i-m+1);
-      j = m;
+      j = m-1;
       i++;
     }
-    else if (compareCharacters(text[i-(m-j)],pattern[j])) j--;
+    else if (compareCharacters(text[i-(m-1-j)],pattern[j])) j--;
     else {
-      i = i+(m- (strrchr(pattern,text[i])-pattern_buffer) +1);
-      j = m;
+      i = i+1; //create next(i)
+      j = m-1;
     }
   }
   printf("\n");
