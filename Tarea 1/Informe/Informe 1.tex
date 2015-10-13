@@ -142,8 +142,13 @@
 		va a mejorar significativamente.
 
 \section{Diseño e implementación}
+	Se crean con python los textos requeridos de tamaño 1MB.\\
+	Se implementan en C los 3 algoritmos, además de los métodos necesarios para ejecutarlos y guardar sus resultados.\\
+	Y finalmente se implementa en python métodos para analizar los resultados.\\
 
-\newpage
+	Más detalles se encuentran en el siguiente repositorio.\\
+
+	\url	https://github.com/Pato285/tareas-algoritmos/
 \section{Experimentos y resultados}
 
 	\subsection{Algoritmos}
@@ -163,6 +168,7 @@
 			\caption{Comparaciones promedio por búsqueda para Fuerza Bruta} \label{construccion}
 		\end{figure}
 
+\newpage
 
 		\begin{figure}[ht!]
 			\centering
@@ -177,7 +183,7 @@
 			\caption{Comparaciones promedio por búsqueda para Knuth-Morris-Pratt} \label{construccion}
 		\end{figure}
 
-
+\newpage
 		\begin{figure}[ht!]
 			\centering
 			\includegraphics[scale=0.5]{img/tBMH.pdf}
@@ -195,7 +201,9 @@
 \newpage
 
 	\subsection{Datos}
-	Ordenando los resultados por datos (eliminando los casos sintéticos ya que resultaron similares a los naturales) se obtiene
+	Se puede ver de las gráficas anteriores que los resultados sintéticos se asemejan muchos
+	a los naturales. Este resultado es esperable dado que tienen un mismo $c$, y por tanto,
+	para ser mas concisos al eliminar los casos sintéticos se obtiene:
 		\begin{figure}[ht!]
 			\centering
 			\includegraphics[scale=0.5]{img/tBINA.pdf}
@@ -266,14 +274,13 @@
 	No ocurre lo esperado, ya que el rendimiento no empeora al aumentar $m$.
 
 \subsection{Knuth-Morris-Pratt}
-	Este algoritmo depende de que se tengan muchas subcadenas que sean prefijo del patrón, lo que significa que va a ser mejor que
-	el primer algoritmo, pero no por mucho.
+	Este algoritmo cumple con lo esperado, al ser mejor que Fuerza Bruta, pero no por mucho.\\
+	Un detalle que se puede apreciar con este algoritmo es que en el caso binario este no empeora como Fuerza Bruta al agrandar $m$, lo
+	cual es posible debido a que al tener tan sólo 2 caracteres, es mucho más probable tener subcadenas que sean prefijo del patrón.
 
 \subsection{Boyer-Moore-Horspool}
-	Este algoritmo se va a comportar mejor que los 2 anteriores por la forma en que salta en el texto
-	al encontrar diferencias (si el caracter no se encuentra o se encuentra muy al principio se salta $m$).
-	Para un $c$ pequeño, este algoritmo no va a ser tanto mejor que los anteriores, pero a medida que crezca,
-	va a mejorar significativamente.
+	Este algoritmo cumple con lo esperado, al no ser tan eficiente con $c$ pequeño y mejorando significativamente al aumentarlo, y por
+	ser mas eficiente al agrandar $m$.
 
 %%==================== IMAGENES =====================
 %% ················ IMAGEN DOBLE ·················
