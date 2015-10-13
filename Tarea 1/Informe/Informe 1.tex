@@ -89,14 +89,192 @@
 
 % =============== SECCIONES Y SUBSECCIONES ===============
 \begin{abstract}
-   abstract-text
+   En este trabajo se analizó 3 algoritmos distintos de búsqueda en texto, implementandolos,
+	 ejecutandolos para distintos casos y comparando estos resultados.
 \end{abstract}
 \section{Introducción}
+	Los algoritmos de búsqueda en texto son fundamentales debido a sus variadas aplicaciones como búsquedas dentro de documentos,
+	búsqueda de cadenas de ADN, etc. Para este trabajo se compararon los siguientes algoritmos:
+	\begin{itemize}
+			\item Fuerza Bruta
+			\item Knuth-Morris-Pratt
+			\item Boyer-Moore-Horspool
+	\end{itemize}
+	\paragraph{} Fuerza Bruta consiste en buscar de izquierda a derecha partiendo del primer caracter del texto y patrón, comparando caracter a
+	caracter, si se encuentra una diferencia se vuelve a comparar comenzando con el caracter siguiente en el texto del que se comenzó, y si
+	se recorrió todo el patrón entonces hay un calce.
+	\paragraph{} Knuth-Morris-Pratt opera de manera similar a Fuerza Bruta, precalculando una tabla del tamaño del patrón a buscar donde
+	cada elemento indica si en la posición donde se encuentra hay un sufijo que sea prefijo del patrón, para así al llegar
+	a una diferencia se puede saber si hay tal sufijo y poder saltarse todos esos caracteres.
+	\paragraph{} Boyer-Moore-Horspool precalcula una operación "siguiente" para cada caracter que indica la última ocurrencia en el patrón
+	de ese caracter (sin considerar su último caracter). Una vez calculado comienza a comparar desde la derecha y si encuentra una diferencia,
+	revisa que caracter se encontraba y avanza de acuerdo a la operación calculada (mientras más al principio se encuentre la última ocurrencia,
+	más se va a avanzar en el texto).
+
+	\paragraph{} Los algoritmos fueron ejecutados con los siguientes tipos de datos:
+	\begin{itemize}
+			\item Alfabeto Binario
+			\item ADN real
+			\item ADN sintético
+			\item Lenguaje Natural, caso real
+			\item Lenguaje Natural, caso sintético
+	\end{itemize}
+
 \section{Hipótesis}
+	Asumiendo $n$ como el tamaño de los datos, $m$ como el tamaño del patrón y $c$ como el tamaño del alfabeto se
+	Formularon las siguientes hipótesis.
+
+	Para todos los algoritmos, el tener un $c$ mayor significa aumentar la probabilidad de fallar, lo que hace que se tenga que
+	avanzar en el texto con mayor frecuencia y así tener que hacer menos comparaciones y tomar menos tiempo.
+	\subsection{Fuerza Bruta}
+		Para Fuerza Bruta, en el peor caso la diferencia se va a encontrar siempre al final de la búsqueda,
+		teniendo que hacer entonces $nm$ comparaciones. Lo que significa que el tiempo y las comparaciones van a crecer
+		proporcionales a $m$.
+
+	\subsection{Knuth-Morris-Pratt}
+		Este algoritmo depende de que se tengan muchas subcadenas que sean prefijo del patrón, lo que significa que va a ser mejor que
+		el primer algoritmo, pero no por mucho.
+
+	\subsection{Boyer-Moore-Horspool}
+		Este algoritmo se va a comportar mejor que los 2 anteriores por la forma en que salta en el texto
+		al encontrar diferencias (si el caracter no se encuentra o se encuentra muy al principio se salta $m$).
+		Para un $c$ pequeño, este algoritmo no va a ser tanto mejor que los anteriores, pero a medida que crezca,
+		va a mejorar significativamente.
+
 \section{Diseño e implementación}
+
+\newpage
 \section{Experimentos y resultados}
-\section{Análisis}
-\section{Conclusión}
+
+	\subsection{Algoritmos}
+		Se ejecutaron los algoritmos 1000 veces para cada dato y largo de patrón, obteniendose los siguientes resultados.
+
+		\begin{figure}[ht!]
+			\centering
+			\includegraphics[scale=0.5]{img/tBF.pdf}
+			\caption{Tiempo de promedio de búsqueda para Fuerza Bruta} \label{construccion}
+		\end{figure}
+
+	\newpage
+
+		\begin{figure}[ht!]
+			\centering
+			\includegraphics[scale=0.5]{img/cBF.pdf}
+			\caption{Comparaciones promedio por búsqueda para Fuerza Bruta} \label{construccion}
+		\end{figure}
+
+
+		\begin{figure}[ht!]
+			\centering
+			\includegraphics[scale=0.5]{img/tKMP.pdf}
+			\caption{Tiempo de promedio de búsqueda para Knuth-Morris-Pratt} \label{construccion}
+		\end{figure}
+
+	\newpage
+		\begin{figure}[ht!]
+			\centering
+			\includegraphics[scale=0.5]{img/cKMP.pdf}
+			\caption{Comparaciones promedio por búsqueda para Knuth-Morris-Pratt} \label{construccion}
+		\end{figure}
+
+
+		\begin{figure}[ht!]
+			\centering
+			\includegraphics[scale=0.5]{img/tBMH.pdf}
+			\caption{Tiempo de promedio de búsqueda para Boyer-Moore-Horspool} \label{construccion}
+		\end{figure}
+
+		\newpage
+		\begin{figure}[ht!]
+			\centering
+			\includegraphics[scale=0.5]{img/cBMH.pdf}
+			\caption{Comparaciones promedio por búsqueda para Boyer-Moore-Horspool} \label{construccion}
+		\end{figure}
+
+
+\newpage
+
+	\subsection{Datos}
+	Ordenando los resultados por datos (eliminando los casos sintéticos ya que resultaron similares a los naturales) se obtiene
+		\begin{figure}[ht!]
+			\centering
+			\includegraphics[scale=0.5]{img/tBINA.pdf}
+			\caption{Tiempo promedio de búsqueda para texto binario} \label{construccion}
+		\end{figure}
+			\newpage
+		\begin{figure}[ht!]
+			\centering
+			\includegraphics[scale=0.5]{img/cBINA.pdf}
+			\caption{Comparaciones promedio por búsqueda para texto binario} \label{construccion}
+		\end{figure}
+	\newpage
+		\begin{figure}[ht!]
+			\centering
+			\includegraphics[scale=0.5]{img/tRDNA.pdf}
+			\caption{Tiempo promedio de búsqueda para cadenas de ADN} \label{construccion}
+		\end{figure}
+			\newpage
+		\begin{figure}[ht!]
+			\centering
+			\includegraphics[scale=0.5]{img/cRDNA.pdf}
+			\caption{Comparaciones promedio por búsqueda para cadenas de ADN} \label{construccion}
+		\end{figure}
+
+	\newpage
+		\begin{figure}[ht!]
+			\centering
+			\includegraphics[scale=0.5]{img/tRLNG.pdf}
+			\caption{Tiempo promedio de búsqueda para lenguaje natural} \label{construccion}
+		\end{figure}
+			\newpage
+		\begin{figure}[ht!]
+			\centering
+			\includegraphics[scale=0.5]{img/cRLNG.pdf}
+			\caption{Comparaciones promedio por búsqueda para lenguaje natural} \label{construccion}
+		\end{figure}
+
+
+
+
+% \begin{figure}[ht!]
+% 	\centering
+% 	\includegraphics[scale=0.5]{img/tSDNA.pdf}
+% 	\caption{Tiempo de búsqueda para cada estructura} \label{construccion}
+% \end{figure}
+% \begin{figure}[ht!]
+% 	\centering
+% 	\includegraphics[scale=0.5]{img/cSDNA.pdf}
+% 	\caption{Tiempo de búsqueda para cada estructura} \label{construccion}
+% \end{figure}
+
+% \begin{figure}[ht!]
+% 	\centering
+% 	\includegraphics[scale=0.5]{img/tSLNG.pdf}
+% 	\caption{Tiempo de búsqueda para cada estructura} \label{construccion}
+% \end{figure}
+% \begin{figure}[ht!]
+% 	\centering
+% 	\includegraphics[scale=0.5]{img/cSLNG.pdf}
+% 	\caption{Tiempo de búsqueda para cada estructura} \label{construccion}
+% \end{figure}
+
+
+\newpage
+\section{Análisis y Conclusiones}
+	En los resultados de cada algoritmo se puede confirmar como aumentar $c$ hace que mejore el rendimiento.
+\subsection{Fuerza Bruta}
+	No ocurre lo esperado, ya que el rendimiento no empeora al aumentar $m$.
+
+\subsection{Knuth-Morris-Pratt}
+	Este algoritmo depende de que se tengan muchas subcadenas que sean prefijo del patrón, lo que significa que va a ser mejor que
+	el primer algoritmo, pero no por mucho.
+
+\subsection{Boyer-Moore-Horspool}
+	Este algoritmo se va a comportar mejor que los 2 anteriores por la forma en que salta en el texto
+	al encontrar diferencias (si el caracter no se encuentra o se encuentra muy al principio se salta $m$).
+	Para un $c$ pequeño, este algoritmo no va a ser tanto mejor que los anteriores, pero a medida que crezca,
+	va a mejorar significativamente.
+
 %%==================== IMAGENES =====================
 %% ················ IMAGEN DOBLE ·················
 %\begin{figure}[ht!] \centering
