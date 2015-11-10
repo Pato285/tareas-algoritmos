@@ -1,7 +1,7 @@
 CC=gcc
 LDFLAGS=
 CFLAGS=-std=c99
-DEPS =
+DEPS = 
 OBJ = main.o
 ODIR=..
 SRCDIR=src
