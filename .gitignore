@@ -227,3 +227,6 @@ hs_err_pid*
 
 # Debug files
 *.dSYM/
+
+#Archivos de prueba
+*.bin
