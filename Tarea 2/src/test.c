@@ -21,17 +21,17 @@ void test_io(){
     // fprintf(stdout, "Block 1 - offset: %i\tdata: %s\n",(int)b1->offset,(char*)b1->data);
     // fprintf(stdout, "Block 2 - offset: %i\tdata: %s\n",(int)b2->offset,(char*)b2->data);
 
-    WriteBlock(&sm,b0);
-    WriteBlock(&sm,b1);
-    WriteBlock(&sm,b2);
+    WriteBlock(&sm,b0);blocks_written++;
+    WriteBlock(&sm,b1);blocks_written++;
+    WriteBlock(&sm,b2);blocks_written++;
 
     FreeBlock(b0);
     FreeBlock(b1);
     FreeBlock(b2);
 
-    b0 = ReadBlock(&sm,0);
-    b1 = ReadBlock(&sm,1);
-    b2 = ReadBlock(&sm,2);
+    b0 = ReadBlock(&sm,0);blocks_read++;
+    b1 = ReadBlock(&sm,1);blocks_read++;
+    b2 = ReadBlock(&sm,2);blocks_read++;
 
     if (strcmp((char*)b0->data,text[i%3])!=0){fprintf(stdout, "Error I/O should return equal strings.\n"); exit(1);}
     if (strcmp((char*)b1->data,text[(i+1)%3])!=0){fprintf(stdout, "Error I/O should return equal strings.\n"); exit(1);}
@@ -66,10 +66,12 @@ void test_bigfile(){
     int j = i%256;
     b = MakeBlock(&sm,(void*)&j,i);
     WriteBlock(&sm,b);
+    blocks_written++;
     FreeBlock(b);
   }
   for (i = 0; i < 1000000; i++) {
     b = ReadBlock(&sm,i);
+    blocks_read++;
     /*fprintf(stdout, "%i==%i\n",((int)*b->data),i%256);*/
     if (((int)*b->data)!=i%256){fprintf(stdout, "Error I/O should return equal numbers.\n"); exit(1);}
     FreeBlock(b);
@@ -104,11 +106,13 @@ void test_structure(){
   Block *b;
   for (i = 0; i < 50; i++) {
     b = MakeBlock(&sm,(void*)&ap,i);
+    blocks_written++;
     WriteBlock(&sm,b);
     FreeBlock(b);
   }
   for (i = 0; i < 50; i++) {
     b = ReadBlock(&sm,i);
+    blocks_read++;
     struct apple *pa = (struct apple*) b->data;
     /*fprintf(stdout, "%f\t%x\t%s\n",pa->freshness,pa->color,pa->name);*/
     if (pa->freshness!=ap.freshness){fprintf(stdout, "Error I/O: wrong apple freshness.\n"); exit(1);}

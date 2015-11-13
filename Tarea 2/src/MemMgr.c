@@ -35,7 +35,7 @@ void WriteBlock(SMemory *sm,Block *block){
     exit(1);
   }
   fwrite(block->data,sm->elem_size,1,sm->fp);
-  blocks_written++;
+  /*blocks_written++;*/
   if (ferror(sm->fp)){
    printf("Error on Write.");
    exit(1);
@@ -54,7 +54,7 @@ Block *ReadBlock(SMemory *sm,int pointer){
     exit(1);
   }
   fread(block->data,sm->elem_size,1,sm->fp);
-  blocks_read++;
+  /*blocks_read++;*/
   if (ferror(sm->fp)){
    printf("Error while trying to Read.");
    exit(1);
