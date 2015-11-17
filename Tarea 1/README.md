@@ -4,7 +4,7 @@ En esta tarea deberá implementar y evaluar algoritmos de búsqueda en texto.
 
 + Fuerza Bruta
 + Knuth-Morris-Prat
-+ Boyer-Moore-Horsepool
++ Boyer-Moore-Horspool
 
 Se trabaja con los siguientes conjuntos de datos.
 
