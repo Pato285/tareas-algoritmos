@@ -29,8 +29,8 @@ void freeTNode(TNode node){
 }
 
 int height(TNode node){
-	int sz_l = node->left == NULL ? node->left.height : 0;
-	int sz_r = node->right == NULL ? node->right.height : 0;
+	int sz_l = node->left == NULL ? -1 : node->left.height;
+	int sz_r = node->right == NULL ? -1 : node->right.height;
 	return MAX(sz_l,sz_r)+1
 }
 
