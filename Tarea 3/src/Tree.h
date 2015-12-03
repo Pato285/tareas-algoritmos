@@ -5,6 +5,7 @@ typedef struct node {
 	char *value;
 	struct node *left;
 	struct node *right;
+	int height;
 } *TNode;
 
 TNode createTNode(char key[],char value[]){
@@ -13,6 +14,7 @@ TNode createTNode(char key[],char value[]){
 	node->value = NULL;
 	node->left = NULL;
 	node->right = NULL;
+	node->height = 0;
 	return node;
 }
 
@@ -26,6 +28,12 @@ void freeTNode(TNode node){
 	/*free(node->key); /* Having serious doubts about erasing here the key. */
 }
 
+int height(TNode node){
+	int sz_l = node->left == NULL ? node->left.height : 0;
+	int sz_r = node->right == NULL ? node->right.height : 0;
+	return MAX(sz_l,sz_r)+1
+}
+
 /* Tree operations */
 
 /**
@@ -36,7 +44,7 @@ typedef TNnode (*insert_fun)(TNode,char[],char[]);
 /**
   * Deletes the node with the given key.
   */
-typedef void (*delete_fun)(TNode,char[]);
+typedef TNnode (*delete_fun)(TNode,char[]);
 
 /**
   * Searches the string with the given key.

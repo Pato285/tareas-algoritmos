@@ -1,85 +1,99 @@
 #include "Tree.h"
 
-typedef struc {
+typedef struct {
 	TNode root;
 	insert_fun insert;
 	delete_fun delete;
 	search_fun search;
-} *ABB;
+} *BST;
 
 /* Tree operations */
-ABB createABB(){
-	ABB abb = (ABB) malloc(sizeof(*abb));
+BST createBST(){
+	BST abb = (BST) malloc(sizeof(*abb));
 	abb->root = NULL;
-	abb->insert = &insertABB;
-	abb->delete = &deleteABB;
-	abb->search = &searchABB;
+	abb->insert = &insertBST;
+	abb->delete = &deleteBST;
+	abb->search = &searchBST;
 	return abb;
 }
 
-void freeABB(ABB abb){
+void freeBST(BST abb){
 	freeTNode(abb->root);
 	free(abb);
 }
 
-TNnode insertABB(TNnode node,char key[],char value[]){
+TNnode insertBST(TNnode node,char key[],char value[]){
 	if (node == NULL) return createTNode(key,value);
 
 	int s = strcmp(node->key,key);
-	if (s<0) node->left = insertABB(node->left,key,value);
-	else if (s>0) node->right = insertABB(node->right,key,value);
+	if (s<0) node->left = insertBST(node->left,key,value);
+	else if (s>0) node->right = insertBST(node->right,key,value);
+	node->height = height(node);
 	return node;
 }
 
 TNode findPredecessorParent(TNode node){
-	if (node->right != NULL && node->right->right == NULL) return node;
-	return findPredecessorParent(node->right);
+	TNode k;
+	if (node->right == NULL){
+		return node;
+	}
+	else if (node->right->right == NULL){
+		k = node->right;
+		node->right = node->right->left;
+	}
+	else k = findPredecessorParent(node->right);
+	node->height = height(node);
+	return k;
 }
 
-void deleteABB(TNnode node,char key[]){
+TNnode deleteBST(TNnode node,char key[]){
 	if (node == NULL) return NULL;
 
 	int s = strcmp(node->key,key);
-	if (s<0) node->left = deleteABB(node->left,key);
-	else if (s>0) node->right = deleteABB(node->right,key);
-	
-	if (node->left == NULL && node->right == NULL) {
-		freeTNode(node);
-		free(node);
-		return NULL;
-	}
-	elif(node->left == NULL){
-		TNnode l = node->left;
-		node->left = NULL;
-		freeTNode(node);
-		free(node);
-		return l;
-	}
-	elif(node->right == NULL){
-		TNnode r = node->right;
+	if (s==0){
+		if (node->left == NULL && node->right == NULL) {
+			freeTNode(node);
+			free(node);
+			return NULL;
+		}
+		elif(node->left == NULL){
+			TNnode l = node->left;
+			node->left = NULL;
+			freeTNode(node);
+			free(node);
+			l = height(l);
+			return l;
+		}
+		elif(node->right == NULL){
+			TNnode r = node->right;
+			node->right = NULL;
+			freeTNode(node);
+			free(node);
+			r = height(r);
+			return r;
+		}
+		TNode k = findPredecessorParent(node->left);
+		k->right = node->right;
+		k->left = node->left;
+		k->height = height(k);
+
+		node->left =  NULL;
 		node->right = NULL;
 		freeTNode(node);
 		free(node);
-		return r;
+		return k;
 	}
-	TNode p = findPredecessorParent(node->left);
-	Tnode l = p->right;
-	Tnode k = l->left;
-	l->right = node->right;
-	l->left = node->left;
-	p->right = k;
-	node->left =  NULL;
-	node->right = NULL;
-	freeTNode(node);
-	free(node);
-	return l;
+	else if (s<0) node->left = deleteBST(node->left,key);
+	else node->right = deleteBST(node->right,key);
+	node->height = height(node);
+	return node;
 }
 
-int searchABB(TNnode node,char key[]){
+int searchBST(TNnode node,char key[]){
 	if (node == NULL) return FALSE;
 
 	int s = strcmp(node->key,key);
-	if (s<0) return searchABB(node->left,key);
-	else if (s>0) return searchABB(node->right,key);
+	if (s<0) return searchBST(node->left,key);
+	else if (s>0) return searchBST(node->right,key);
 	return TRUE;
 }
