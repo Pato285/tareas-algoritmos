@@ -22,6 +22,15 @@ int main(int argc, char const *argv[]) {
   printf("delete Q\n");
   bst->root = bst->delete(bst->root,"Q");
   inorderprint(bst->root);
+  printf("insert C E D\n");
+  bst->root = bst->insert(bst->root,"C","C");
+  bst->root = bst->insert(bst->root,"E","E");
+  bst->root = bst->insert(bst->root,"D","D");
+  inorderprint(bst->root);
+  printf("delete K\n");
+  bst->root = bst->delete(bst->root,"K");
+  inorderprint(bst->root);
+  printf("ENDING\n");
   freeBST(bst);
   return 0;
 }

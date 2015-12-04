@@ -38,12 +38,11 @@ TNode insertBST(TNode node,char key[],char value[]){
 
 TNode findPredecessorParent(TNode node){
 	TNode k;
-	if (node->right == NULL){
-		return node;
-	}
-	else if (node->right->right == NULL){
+	if (node->right->right == NULL){
 		k = node->right;
-		node->right = node->right->left;
+		node->right = k->left;
+		k->right = NULL;
+		k->left = NULL;
 	}
 	else k = findPredecessorParent(node->right);
 	node->height = height(node);
@@ -59,7 +58,7 @@ TNode deleteBST(TNode node,char key[]){
 			free(node);
 			return NULL;
 		}
-		else if(node->left == NULL){
+		else if(node->right == NULL){
 			TNode l = node->left;
 			node->left = NULL;
 			freeTNode(node);
@@ -67,7 +66,7 @@ TNode deleteBST(TNode node,char key[]){
 			l->height = height(l);
 			return l;
 		}
-		else if(node->right == NULL){
+		else if(node->left == NULL){
 			TNode r = node->right;
 			node->right = NULL;
 			freeTNode(node);
@@ -75,11 +74,21 @@ TNode deleteBST(TNode node,char key[]){
 			r->height = height(r);
 			return r;
 		}
-		TNode k = findPredecessorParent(node->left);
+		TNode k;
+		if (node->left->right == NULL){
+			k = node->left;
+			k->right = node->right;
+			k->height = height(k);
+			node->left =  NULL;
+			node->right = NULL;
+			freeTNode(node);
+			free(node);
+			return k;
+		}
+		k = findPredecessorParent(node->left);
 		k->right = node->right;
 		k->left = node->left;
 		k->height = height(k);
-
 		node->left =  NULL;
 		node->right = NULL;
 		freeTNode(node);
