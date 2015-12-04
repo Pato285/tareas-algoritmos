@@ -7,6 +7,10 @@ typedef struct {
 	search_fun search;
 } *AVL;
 
+TNode insertAVL(TNode,char[],char[]);
+TNode deleteAVL(TNode,char[]);
+int searchAVL(TNode,char[]);
+
 /* Tree operations */
 AVL createAVL(){
 	AVL avl = (AVL) malloc(sizeof(*avl));
@@ -23,7 +27,7 @@ void freeAVL(AVL avl){
 }
 
 TNode leftRotation(TNode node){
-	Tnode q = node->left;
+	TNode q = node->left;
 	node->left = q->right;
 	q->right = node;
 	node->height = height(node);
@@ -62,18 +66,18 @@ TNode doubleLeftRotation(TNode node){
 	return r;
 }
 
-int isAVL(TNnode node){
+int isAVL(TNode node){
 	if (node->height == 0) return TRUE;
 	return abs(node->right->height - node->left->height) <= 1; /* <= 1 may work for the bottom-most cases*/
 }
 
-TNnode insertAVL(TNnode node,char key[],char value[]){
+TNode insertAVL(TNode node,char key[],char value[]){
 	if (node == NULL) return createTNode(key,value);
 
 	int s = strcmp(node->key,key);
 	if (s<0) {
 		node->left = insertAVL(node->left,key,value);
-		if ( !isAvl(node) )
+		if ( !isAVL(node) )
 			if ( strcmp(key,node->left->key)>0 )
 				node = doubleLeftRotation(node);
 			else
@@ -81,16 +85,16 @@ TNnode insertAVL(TNnode node,char key[],char value[]){
 	}
 	else if (s>0) {
 		node->right = insertAVL(node->right,key,value);
-		if ( !isAvl(node) )
+		if ( !isAVL(node) )
 			if ( strcmp(key,node->right->key)<0 )
 				node = doubleRightRotation(node);
 			else
 				node = rightRotation(node);
-	}	
+	}
 	node->height = height(node);
 	return node;
 }
-
+/*
 TNode findPredecessorParent(TNode node){
 	TNode k;
 	if (node->right == NULL){
@@ -105,7 +109,7 @@ TNode findPredecessorParent(TNode node){
 	return k;
 }
 /* TODO: DELETE MUST PRESERVE AVL CONDITIONS */
-TNnode deleteAVL(TNnode node,char key[]){
+TNode deleteAVL(TNode node,char key[]){/*
 	if (node == NULL) return NULL;
 
 	int s = strcmp(node->key,key);
@@ -115,20 +119,20 @@ TNnode deleteAVL(TNnode node,char key[]){
 			free(node);
 			return NULL;
 		}
-		elif(node->left == NULL){
-			TNnode l = node->left;
+		else if(node->left == NULL){
+			TNode l = node->left;
 			node->left = NULL;
 			freeTNode(node);
 			free(node);
-			l = height(l);
+			l->height = height(l);
 			return l;
 		}
-		elif(node->right == NULL){
-			TNnode r = node->right;
+		else if(node->right == NULL){
+			TNode r = node->right;
 			node->right = NULL;
 			freeTNode(node);
 			free(node);
-			r = height(r);
+			r->height = height(r);
 			return r;
 		}
 		TNode k = findPredecessorParent(node->left);
@@ -144,11 +148,11 @@ TNnode deleteAVL(TNnode node,char key[]){
 	}
 	else if (s<0) node->left = deleteAVL(node->left,key);
 	else node->right = deleteAVL(node->right,key);
-	node->height = height(node);
+	node->height = height(node);*/
 	return node;
 }
 
-int searchAVL(TNnode node,char key[]){
+int searchAVL(TNode node,char key[]){
 	if (node == NULL) return FALSE;
 
 	int s = strcmp(node->key,key);

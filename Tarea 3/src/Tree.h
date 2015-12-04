@@ -1,4 +1,12 @@
+#ifndef TREE
+#define TREE
 #include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+
+#define TRUE 1
+#define FALSE 0
+#define MAX(a,b) (((a)>(b))?(a):(b))
 
 typedef struct node {
 	char *key;
@@ -10,8 +18,8 @@ typedef struct node {
 
 TNode createTNode(char key[],char value[]){
 	TNode node = (TNode) malloc(sizeof(*node));
-	node->key = NULL;
-	node->value = NULL;
+	node->key = key;
+	node->value = value;
 	node->left = NULL;
 	node->right = NULL;
 	node->height = 0;
@@ -19,19 +27,22 @@ TNode createTNode(char key[],char value[]){
 }
 
 void freeTNode(TNode node){
-	if (node->left != NULL)
+	if (node==NULL) return;
+	if (node->left != NULL){
 		freeTNode(node->left);
-	if (node->right != NULL)
+		free(node->left);
+	}
+	if (node->right != NULL){
 		freeTNode(node->right);
-	free(node->left);
-	free(node->right);
+		free(node->right);
+	}
 	/*free(node->key); /* Having serious doubts about erasing here the key. */
 }
 
 int height(TNode node){
-	int sz_l = node->left == NULL ? -1 : node->left.height;
-	int sz_r = node->right == NULL ? -1 : node->right.height;
-	return MAX(sz_l,sz_r)+1
+	int sz_l = node->left == NULL ? -1 : node->left->height;
+	int sz_r = node->right == NULL ? -1 : node->right->height;
+	return MAX(sz_l,sz_r)+1;
 }
 
 /* Tree operations */
@@ -39,12 +50,12 @@ int height(TNode node){
 /**
   * Inserts the value in the tree using the given key.
   */
-typedef TNnode (*insert_fun)(TNode,char[],char[]);
+typedef TNode (*insert_fun)(TNode,char[],char[]);
 
 /**
   * Deletes the node with the given key.
   */
-typedef TNnode (*delete_fun)(TNode,char[]);
+typedef TNode (*delete_fun)(TNode,char[]);
 
 /**
   * Searches the string with the given key.
@@ -55,3 +66,4 @@ typedef int (*search_fun)(TNode,char[]);
 	we store the pointers to strings not the strings themselves.
 	key and value must be allocated before inserting and must be deallocated afterwards.
 */
+#endif

@@ -7,6 +7,10 @@ typedef struct {
 	search_fun search;
 } *BST;
 
+TNode insertBST(TNode,char[],char[]);
+TNode deleteBST(TNode,char[]);
+int searchBST(TNode,char[]);
+
 /* Tree operations */
 BST createBST(){
 	BST abb = (BST) malloc(sizeof(*abb));
@@ -19,10 +23,11 @@ BST createBST(){
 
 void freeBST(BST abb){
 	freeTNode(abb->root);
+	printf("asda\n" );
 	free(abb);
 }
 
-TNnode insertBST(TNnode node,char key[],char value[]){
+TNode insertBST(TNode node,char key[],char value[]){
 	if (node == NULL) return createTNode(key,value);
 
 	int s = strcmp(node->key,key);
@@ -46,7 +51,7 @@ TNode findPredecessorParent(TNode node){
 	return k;
 }
 
-TNnode deleteBST(TNnode node,char key[]){
+TNode deleteBST(TNode node,char key[]){
 	if (node == NULL) return NULL;
 
 	int s = strcmp(node->key,key);
@@ -56,20 +61,20 @@ TNnode deleteBST(TNnode node,char key[]){
 			free(node);
 			return NULL;
 		}
-		elif(node->left == NULL){
-			TNnode l = node->left;
+		else if(node->left == NULL){
+			TNode l = node->left;
 			node->left = NULL;
 			freeTNode(node);
 			free(node);
-			l = height(l);
+			l->height = height(l);
 			return l;
 		}
-		elif(node->right == NULL){
-			TNnode r = node->right;
+		else if(node->right == NULL){
+			TNode r = node->right;
 			node->right = NULL;
 			freeTNode(node);
 			free(node);
-			r = height(r);
+			r->height = height(r);
 			return r;
 		}
 		TNode k = findPredecessorParent(node->left);
@@ -89,9 +94,8 @@ TNnode deleteBST(TNnode node,char key[]){
 	return node;
 }
 
-int searchBST(TNnode node,char key[]){
+int searchBST(TNode node,char key[]){
 	if (node == NULL) return FALSE;
-
 	int s = strcmp(node->key,key);
 	if (s<0) return searchBST(node->left,key);
 	else if (s>0) return searchBST(node->right,key);
