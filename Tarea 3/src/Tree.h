@@ -62,6 +62,27 @@ typedef TNode (*delete_fun)(TNode,char[]);
   */
 typedef int (*search_fun)(TNode,char[]);
 
+void preorderprint(TNode node){
+	if (node == NULL) return;
+	printf("%s %i\n",node->value,node->height);
+	preorderprint(node->left);
+	preorderprint(node->right);
+}
+
+void inorderprint(TNode node){
+	if (node == NULL) return;
+	inorderprint(node->left);
+	printf("%s %i\n",node->value,node->height);
+	inorderprint(node->right);
+}
+
+void postorderprint(TNode node){
+	if (node == NULL) return;
+	postorderprint(node->left);
+	postorderprint(node->right);
+	printf("%s %i\n",node->value,node->height);
+}
+
 /*
 	we store the pointers to strings not the strings themselves.
 	key and value must be allocated before inserting and must be deallocated afterwards.

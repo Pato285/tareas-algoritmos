@@ -23,7 +23,6 @@ BST createBST(){
 
 void freeBST(BST abb){
 	freeTNode(abb->root);
-	printf("asda\n" );
 	free(abb);
 }
 
@@ -31,8 +30,8 @@ TNode insertBST(TNode node,char key[],char value[]){
 	if (node == NULL) return createTNode(key,value);
 
 	int s = strcmp(node->key,key);
-	if (s<0) node->left = insertBST(node->left,key,value);
-	else if (s>0) node->right = insertBST(node->right,key,value);
+	if (s>0) node->left = insertBST(node->left,key,value);
+	else if (s<0) node->right = insertBST(node->right,key,value);
 	node->height = height(node);
 	return node;
 }
@@ -53,7 +52,6 @@ TNode findPredecessorParent(TNode node){
 
 TNode deleteBST(TNode node,char key[]){
 	if (node == NULL) return NULL;
-
 	int s = strcmp(node->key,key);
 	if (s==0){
 		if (node->left == NULL && node->right == NULL) {
@@ -88,7 +86,7 @@ TNode deleteBST(TNode node,char key[]){
 		free(node);
 		return k;
 	}
-	else if (s<0) node->left = deleteBST(node->left,key);
+	else if (s>0) node->left = deleteBST(node->left,key);
 	else node->right = deleteBST(node->right,key);
 	node->height = height(node);
 	return node;
@@ -97,7 +95,7 @@ TNode deleteBST(TNode node,char key[]){
 int searchBST(TNode node,char key[]){
 	if (node == NULL) return FALSE;
 	int s = strcmp(node->key,key);
-	if (s<0) return searchBST(node->left,key);
-	else if (s>0) return searchBST(node->right,key);
+	if (s>0) return searchBST(node->left,key);
+	else if (s<0) return searchBST(node->right,key);
 	return TRUE;
 }
