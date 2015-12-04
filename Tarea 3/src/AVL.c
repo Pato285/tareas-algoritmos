@@ -75,7 +75,7 @@ TNode insertAVL(TNode node,char key[],char value[]){
 	if (node == NULL) return createTNode(key,value);
 
 	int s = strcmp(node->key,key);
-	if (s<0) {
+	if (s>0) {
 		node->left = insertAVL(node->left,key,value);
 		if ( !isAVL(node) )
 			if ( strcmp(key,node->left->key)>0 )
@@ -83,7 +83,7 @@ TNode insertAVL(TNode node,char key[],char value[]){
 			else
 				node = leftRotation(node);
 	}
-	else if (s>0) {
+	else if (s<0) {
 		node->right = insertAVL(node->right,key,value);
 		if ( !isAVL(node) )
 			if ( strcmp(key,node->right->key)<0 )
@@ -94,69 +94,66 @@ TNode insertAVL(TNode node,char key[],char value[]){
 	node->height = height(node);
 	return node;
 }
-/*
-TNode findPredecessorParent(TNode node){
+
+TNode findPredecessorParentAVL(TNode node){
 	TNode k;
-	if (node->right == NULL){
-		return node;
-	}
-	else if (node->right->right == NULL){
+	if (node->right->right == NULL){
 		k = node->right;
-		node->right = node->right->left;
+		node->right = k->left;
+		k->right = NULL;
+		k->left = NULL;
 	}
-	else k = findPredecessorParent(node->right);
+	else k = findPredecessorParentAVL(node->right);
 	node->height = height(node);
 	return k;
 }
-/* TODO: DELETE MUST PRESERVE AVL CONDITIONS */
-TNode deleteAVL(TNode node,char key[]){/*
-	if (node == NULL) return NULL;
 
+TNode deleteAVL(TNode node,char key[]){
+	if (node == NULL) return NULL;
 	int s = strcmp(node->key,key);
 	if (s==0){
+		TNode r;
 		if (node->left == NULL && node->right == NULL) {
 			freeTNode(node);
 			free(node);
 			return NULL;
 		}
-		else if(node->left == NULL){
-			TNode l = node->left;
-			node->left = NULL;
-			freeTNode(node);
-			free(node);
-			l->height = height(l);
-			return l;
-		}
 		else if(node->right == NULL){
-			TNode r = node->right;
-			node->right = NULL;
-			freeTNode(node);
-			free(node);
-			r->height = height(r);
-			return r;
+			r = node->left;
+			node->left = NULL;
 		}
-		TNode k = findPredecessorParent(node->left);
-		k->right = node->right;
-		k->left = node->left;
-		k->height = height(k);
-
-		node->left =  NULL;
-		node->right = NULL;
+		else if(node->left == NULL){
+			r = node->right;
+			node->right = NULL;
+		}
+		else if (node->left->right == NULL){
+			r = node->left;
+			r->right = node->right;
+			node->left =  NULL;
+			node->right = NULL;
+		}
+		else {
+			r = findPredecessorParentAVL(node->left);
+			r->right = node->right;
+			r->left = node->left;
+			node->left =  NULL;
+			node->right = NULL;
+		}
 		freeTNode(node);
 		free(node);
-		return k;
+		r->height = height(r);
+		return r;
 	}
-	else if (s<0) node->left = deleteAVL(node->left,key);
+	else if (s>0) node->left = deleteAVL(node->left,key);
 	else node->right = deleteAVL(node->right,key);
-	node->height = height(node);*/
+	node->height = height(node);
 	return node;
 }
-
 int searchAVL(TNode node,char key[]){
 	if (node == NULL) return FALSE;
 
 	int s = strcmp(node->key,key);
-	if (s<0) return searchAVL(node->left,key);
-	else if (s>0) return searchAVL(node->right,key);
+	if (s>0) return searchAVL(node->left,key);
+	else if (s<0) return searchAVL(node->right,key);
 	return TRUE;
 }
