@@ -230,3 +230,5 @@ hs_err_pid*
 
 #Archivos de prueba
 *.bin
+
+main

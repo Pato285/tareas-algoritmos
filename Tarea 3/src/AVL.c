@@ -67,35 +67,36 @@ TNode doubleLeftRotation(TNode node){
 }
 
 int isAVL(TNode node){
-	if (node->height == 0) return TRUE;
-	return abs(node->right->height - node->left->height) <= 1; /* <= 1 may work for the bottom-most cases*/
+	if (node->height <= 1) return TRUE;
+	return abs(height(node->right) - height(node->left)) <= 1;
 }
 
 TNode insertAVL(TNode node,char key[],char value[]){
 	if (node == NULL) return createTNode(key,value);
-
 	int s = strcmp(node->key,key);
 	if (s>0) {
 		node->left = insertAVL(node->left,key,value);
-		if ( !isAVL(node) )
-			if ( strcmp(key,node->left->key)>0 )
+		if ( !isAVL(node) ) {
+			if ( strcmp(node->left->key,key)<0 )
 				node = doubleLeftRotation(node);
 			else
 				node = leftRotation(node);
+		}
 	}
 	else if (s<0) {
 		node->right = insertAVL(node->right,key,value);
-		if ( !isAVL(node) )
-			if ( strcmp(key,node->right->key)<0 )
+		if ( !isAVL(node) ) {
+			if ( strcmp(node->right->key,key)>0 )
 				node = doubleRightRotation(node);
 			else
 				node = rightRotation(node);
+		}
 	}
 	node->height = height(node);
 	return node;
 }
 
-TNode findPredecessorParentAVL(TNode node){
+TNode findPredecessorParentAVL(TNode node,char key[]){
 	TNode k;
 	if (node->right->right == NULL){
 		k = node->right;
@@ -103,8 +104,14 @@ TNode findPredecessorParentAVL(TNode node){
 		k->right = NULL;
 		k->left = NULL;
 	}
-	else k = findPredecessorParentAVL(node->right);
+	else k = findPredecessorParentAVL(node->right,key);
 	node->height = height(node);
+	if ( !isAVL(node) ) {
+		if ( strcmp(node->right->key,key)>0 )
+			node = doubleRightRotation(node);
+		else
+			node = rightRotation(node);
+	}
 	return k;
 }
 
@@ -120,25 +127,21 @@ TNode deleteAVL(TNode node,char key[]){
 		}
 		else if(node->right == NULL){
 			r = node->left;
-			node->left = NULL;
 		}
 		else if(node->left == NULL){
 			r = node->right;
-			node->right = NULL;
 		}
 		else if (node->left->right == NULL){
 			r = node->left;
 			r->right = node->right;
-			node->left =  NULL;
-			node->right = NULL;
 		}
 		else {
-			r = findPredecessorParentAVL(node->left);
+			r = findPredecessorParentAVL(node->left,key);
 			r->right = node->right;
 			r->left = node->left;
-			node->left =  NULL;
-			node->right = NULL;
 		}
+		node->left =  NULL;
+		node->right = NULL;
 		freeTNode(node);
 		free(node);
 		r->height = height(r);
