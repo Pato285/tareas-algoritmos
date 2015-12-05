@@ -2,6 +2,52 @@
 #include "BST.c"
 #include "AVL.c"
 
+typedef struct {
+  int n;
+  int byten;
+  int off_idx;
+  int off_str;
+  int *idx;
+  char *str;
+} *Data;
+
+Data readFile(const char *name){
+  FILE *f = fopen(name, "r");
+  if (f == NULL){
+    printf("Error opening file!: %s\n",name);
+    exit(1);
+  }
+
+  Data dt = (Data) malloc(sizeof(*dt));
+  int magic;
+  fread(&magic,4,1,f);
+  if (magic!=1214793300){
+    printf ("Not a potato file %s\n",name);
+    fclose(f);
+    exit(1);
+  }
+  fread(&(dt->n), 4, 1, f);
+  fread(&(dt->byten), 4, 1, f);
+  fread(&(dt->off_idx), 4, 1, f);
+  fread(&(dt->off_str), 4, 1, f);
+
+  dt->idx = (int*) malloc(sizeof(int)*dt->n);
+  dt->str = (char*) malloc(dt->byten);
+
+  fseek(f,dt->off_idx,SEEK_SET);
+  fread(dt->idx, sizeof(int), dt->n, f);
+  fseek(f,dt->off_str,SEEK_SET);
+  fread(dt->str, 1, dt->byten, f);
+
+  if (ferror(f)){
+    printf ("Error reading %s\n",name);
+    fclose(f);
+    exit(1);
+  }
+  fclose(f);
+  return dt;
+}
+
 int main(int argc, char const *argv[]) {
   char *test = "K\0A\0Q\0L\0B\0S";
   int index[] = {0,2,4,6,8,10};
@@ -63,5 +109,21 @@ int main(int argc, char const *argv[]) {
 
   printf("ENDING\n");
   freeAVL(avl);
+
+  Data dt = readFile("out.pto");
+  printf("%i\n", dt->n);
+  printf("%i\n", dt->byten);
+  printf("%i\n", dt->off_idx);
+  printf("%i\n", dt->off_str);
+  printf("%s\n", dt->str);
+
+  for (size_t i = 0; i < dt->n; i++) {
+    printf("%s\n", dt->str+dt->idx[i] );
+  }
+
+  free(dt->idx);
+  free(dt->str);
+  free(dt);
+
   return 0;
 }
