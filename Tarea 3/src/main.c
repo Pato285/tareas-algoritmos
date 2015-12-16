@@ -49,6 +49,15 @@ Data readFile(const char *name){
 }
 
 int main(int argc, char const *argv[]) {
+  const char *filename = "text.pto";
+  Data dt = readFile("out.pto");
+
+  /*  */
+
+  free(dt->idx);
+  free(dt->str);
+  free(dt);
+  /*
   char *test = "K\0A\0Q\0L\0B\0S";
   int index[] = {0,2,4,6,8,10};
 
@@ -123,7 +132,7 @@ int main(int argc, char const *argv[]) {
 
   free(dt->idx);
   free(dt->str);
-  free(dt);
+  free(dt);*/
 
   return 0;
 }
