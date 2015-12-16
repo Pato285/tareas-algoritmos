@@ -79,7 +79,7 @@ void test(void *p,Data dt){
 
       total += end-start;
     }
-    printf("Mean Time speant SEARCHING with 2^%i data is %f ms.\n",i,total/(2<<i));
+    printf("Mean Time spent SEARCHING with 2^%i data is %f ms.\n",i,total/(2<<i));
   }
 
   printf("DELETION\n");
@@ -93,31 +93,35 @@ void test(void *p,Data dt){
 
       total += end-start;
     }
-    printf("Size of Structure with 2^%i data is %i, index %i\n",i,size(bst->root),s);
-    printf("Mean Time speant DELETING with 2^%i data is %f ms.\n",i,total/(2<<i));
+    printf("Mean Time spent DELETING with 2^%i data is %f ms.\n",i,total/(2<<i));
   }
 
 }
 
 int main(int argc, char const *argv[]) {
-  const char *filename = "word_8_15.pto";
-  Data dt = readFile(filename);
+  char *filename = malloc(14);
+  strcpy(filename,"word_0_15.pto");
 
+  for (size_t i = 4; i < 9; i++) {
 
-  /* GET THE SIZE OF THE STRUCTURE EVERY i */
-  printf("TESTING BST\n");
-  BST bst = createBST();
-  test(bst,dt);
-  freeBST(bst);
+    filename[5] = '0' + i;
+    printf("WORKING ON %s\n",filename);
+    Data dt = readFile(filename);
 
-  printf("TESTING AVL\n");
-  AVL avl = createAVL();
-  test(avl,dt);
-  freeAVL(avl);
+    printf("TESTING BST\n");
+    BST bst = createBST();
+    test(bst,dt);
+    freeBST(bst);
 
-  free(dt->idx);
-  free(dt->str);
-  free(dt);
+    printf("TESTING AVL\n");
+    AVL avl = createAVL();
+    test(avl,dt);
+    freeAVL(avl);
+
+    free(dt->idx);
+    free(dt->str);
+    free(dt);
+  }
   /*
   char *test = "K\0A\0Q\0L\0B\0S";
   int index[] = {0,2,4,6,8,10};
