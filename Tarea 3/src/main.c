@@ -4,7 +4,7 @@
 
 typedef struct {
   int n;
-  int byten;
+  int byten; /* SIZE OF THE ARRAY IN BYTES */
   int off_idx;
   int off_str;
   int *idx;
@@ -50,9 +50,19 @@ Data readFile(const char *name){
 
 int main(int argc, char const *argv[]) {
   const char *filename = "text.pto";
-  Data dt = readFile("out.pto");
+  Data dt = readFile(filename);
 
-  /*  */
+  /* GET THE SIZE OF THE STRUCTURE EVERY i */
+  int s = 0;
+  BST bst = createBST();
+  for (size_t i = 4; i < 15; i++) {
+    for (;s<(2<<i);s++) {
+      bst->root = bst->insert(bst->root,dt->str+dt->idx[s],dt->str+dt->idx[s]);
+    }
+    printf("Size of Structure with 2^%i data is %i, index %i\n",i,size(bst->root),s);
+  }
+
+  inorderprint(bst->root);
 
   free(dt->idx);
   free(dt->str);

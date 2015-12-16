@@ -84,6 +84,11 @@ void postorderprint(TNode node){
 	printf("%s %i\n",node->value,node->height);
 }
 
+int size(TNode node){
+	if (node == NULL) return 0;
+	return size(node->left) + sizeof(*node) + strlen(node->key) + strlen(node->value) + size(node->right) + 2;
+}
+
 /*
 	we store the pointers to strings not the strings themselves.
 	key and value must be allocated before inserting and must be deallocated afterwards.
