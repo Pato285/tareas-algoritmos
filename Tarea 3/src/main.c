@@ -1,6 +1,7 @@
 #include "Tree.h"
 #include "BST.c"
 #include "AVL.c"
+#include <time.h>
 
 typedef struct {
   int n;
@@ -48,21 +49,71 @@ Data readFile(const char *name){
   return dt;
 }
 
-int main(int argc, char const *argv[]) {
-  const char *filename = "text.pto";
-  Data dt = readFile(filename);
-
-  /* GET THE SIZE OF THE STRUCTURE EVERY i */
+void test(void *p,Data dt){
+  double start, end;
+  double total = 0;
   int s = 0;
-  BST bst = createBST();
+
+  BST bst = (BST) p;
+
+  printf("INSERTION\n");
   for (size_t i = 4; i < 15; i++) {
     for (;s<(2<<i);s++) {
+      start = clock();
       bst->root = bst->insert(bst->root,dt->str+dt->idx[s],dt->str+dt->idx[s]);
+      end = clock();
+      total += end-start;
     }
     printf("Size of Structure with 2^%i data is %i, index %i\n",i,size(bst->root),s);
+    printf("Mean Time spent INSERTING with 2^%i data is %f ms.\n",i,total/(2<<i));
   }
 
-  inorderprint(bst->root);
+  printf("SEARCH\n");
+  for (size_t i = 4; i < 15; i++) {
+    for (;s<(2<<i);s++) {
+      int r = rand() % dt->n;
+
+      start = clock();
+      bst->search(bst->root,dt->str+dt->idx[r]);
+      end = clock();
+
+      total += end-start;
+    }
+    printf("Mean Time speant SEARCHING with 2^%i data is %f ms.\n",i,total/(2<<i));
+  }
+
+  printf("DELETION\n");
+  for (size_t i = 4; i < 15; i++) {
+    for (;s<(2<<i);s++) {
+      int r = rand() % dt->n;
+
+      start = clock();
+      bst->root = bst->delete(bst->root,dt->str+dt->idx[r]);
+      end = clock();
+
+      total += end-start;
+    }
+    printf("Size of Structure with 2^%i data is %i, index %i\n",i,size(bst->root),s);
+    printf("Mean Time speant DELETING with 2^%i data is %f ms.\n",i,total/(2<<i));
+  }
+
+}
+
+int main(int argc, char const *argv[]) {
+  const char *filename = "word_8_15.pto";
+  Data dt = readFile(filename);
+
+
+  /* GET THE SIZE OF THE STRUCTURE EVERY i */
+  printf("TESTING BST\n");
+  BST bst = createBST();
+  test(bst,dt);
+  freeBST(bst);
+
+  printf("TESTING AVL\n");
+  AVL avl = createAVL();
+  test(avl,dt);
+  freeAVL(avl);
 
   free(dt->idx);
   free(dt->str);
