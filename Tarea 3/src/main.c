@@ -51,12 +51,13 @@ Data readFile(const char *name){
 
 void test(void *p,Data dt){
   double start, end;
-  double total = 0;
-  int s = 0;
+  double total;
+  int s;
 
   BST bst = (BST) p;
 
   printf("INSERTION\n");
+  total = s = 0;
   for (size_t i = 4; i < 15; i++) {
     for (;s<(2<<i);s++) {
       start = clock();
@@ -69,6 +70,7 @@ void test(void *p,Data dt){
   }
 
   printf("SEARCH\n");
+  total = s = 0;
   for (size_t i = 4; i < 15; i++) {
     for (;s<(2<<i);s++) {
       int r = rand() % dt->n;
@@ -83,16 +85,18 @@ void test(void *p,Data dt){
   }
 
   printf("DELETION\n");
+  total = s = 0;
   for (size_t i = 4; i < 15; i++) {
     for (;s<(2<<i);s++) {
       int r = rand() % dt->n;
-
+      
       start = clock();
       bst->root = bst->delete(bst->root,dt->str+dt->idx[r]);
       end = clock();
 
       total += end-start;
     }
+    printf("Size of Structure with 2^%i data is %i, index %i\n",i,size(bst->root),s);
     printf("Mean Time spent DELETING with 2^%i data is %f ms.\n",i,total/(2<<i));
   }
 
