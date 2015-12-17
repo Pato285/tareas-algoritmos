@@ -139,6 +139,21 @@ Para este trabajo se compararon los siguientes tipos de diccionarios
 
 \section{Diseño e implementación}
 
+Se desarrollaron todas las estructuras de datos en C. Esta decisión está dada por familiaridad con el lenguaje y por la facilidad para el cálculo del tamaño totadl de las estructuras.
+Los árboles estudiados fueron implementados como estructuras, siguiendo una misma firma para el llamado a las operaciones estudiadas. De esta forma todos los métodos pueden seguir la misma bateria de tests.
+
+Para el manejo de strings, se trabajó con una tabla de dos entradas. La primera tabla es un único arreglo de carácteres que contiene todo el universo estudiado. La segunda tabla es un arreglo que indica el índice en el cuál inicia cada string.
+De esta forma los nodos sólo hacen referencia a los strings almacenados. Con este método nos aseguramos que las operaciones estudiadas no consideren el tiempo de alocación o desecho de memoria reservada para strings.
+A pesar de esto, el tamaño calculado de los nodos si considera el tamaño del string almacenado.
+Esta decisión fue tomada para facilitar la alocación y desecho de memoria para los strings.
+
+Con el fin de generar los universos de datos, se trabajó con dos script auxiliares en Phyton.
+El primer script genera archivos de texto con listas de palabras aleatorias de tamaño uniforme. Las palabras generadas tienen un tamaño de $2^4 a 2^8$ carácteres yel archivo consta de $2^15$ palabras.
+
+El segundo script toma un archivo de texto plano cualquiera y genera un archivo \textit{pto} que es utilizable por la tarea.
+Un archivo pto es un archivo binario que contiene la tabla de strings y la tabla de índices, además de algunos datos para facilitar la lectura del archivo mismo.
+El texto de input es filtrado, eliminando carácateres extraños y el archivo pto es generado.
+
 \section{Experimentos y resultados}
 
 
