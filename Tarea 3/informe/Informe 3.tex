@@ -89,7 +89,7 @@
 
 % =============== SECCIONES Y SUBSECCIONES ===============
 \begin{abstract}
-   En este trabajo se analizó 4 estructuras distintas para diccionarios, implementandolas,
+   En este trabajo se analizaron 2 estructuras distintas para diccionarios, implementandolas,
 	 ejecutandolas para distintos casos y comparando para uno su rendimiento ante inserciones, consultas y eliminaciones.
 \end{abstract}
 \section{Introducción}
@@ -112,8 +112,8 @@ Para este trabajo se compararon los siguientes tipos de diccionarios
 
 	\begin{itemize}
 			\item $2^{4}$ a $2^{14}$ inserciones
-			\item $2^{4}$ a $2^{15}$ búsquedas para las estructuras de mayor tamaño
-			\item $2^{4}$ a $2^{15}$ borrados
+			\item $2^{4}$ a $2^{14}$ búsquedas para las estructuras de mayor tamaño
+			\item $2^{4}$ a $2^{14}$ borrados
 	\end{itemize}
 
 \newpage
@@ -160,7 +160,7 @@ El texto de input es filtrado, eliminando carácateres extraños y el archivo pt
 	Se ejecutaron las pruebas mencionadas, obteniendo para cada operación el tiempo que tarda por tamaño de las palabras y por
 	número de palabras, cuyos resultados se pueden observar en los siguientes gráficos
 
-\newpage 
+\newpage
 	\begin{figure}[ht!]
 		\centering \includegraphics[scale=0.8]{img/ins-size.jpg}
 	\end{figure}
@@ -349,10 +349,13 @@ El texto de input es filtrado, eliminando carácateres extraños y el archivo pt
 %\end{thebibliography}
 
 % ============= ANEXOS ==============
-\appendix
-\chapter{Tiempos Promedio vs Largo de palabras}
 
-\begin{table}[]
+\newpage
+\chapter{Anexos}
+\appendix
+\section{Tiempos Promedio vs Largo de palabras}
+
+\begin{table}[!htbp]
 \centering
 %\caption{My caption}
 %\label{my-label}
@@ -367,9 +370,9 @@ Word Length {[}log(char){]} & BST Size{[}Bytes{]} & BST INSRT Time{[}ms{]} & BST
 \end{tabular}}
 \end{table}
 
-\chapter{Tiempos Promedio vs Número de palabras}
+\section{Tiempos Promedio vs Número de palabras}
 
-\begin{table}[]
+\begin{table}[!htbp]
 \centering
 %\caption{My caption}
 %\label{my-label}
@@ -384,8 +387,8 @@ Number of Words {[}log(N){]} & BST Size{[}Bytes{]} & BST INSRT Time{[}ms{]} & BS
 \end{tabular}}
 \end{table}
 
-\chapter{Tiempos Promedio de ejecución y Tamaño de estructura en detalle}
-\begin{table}[]
+\section{Tiempos Promedio de ejecución y Tamaño de estructura en detalle}
+\begin{table}[!htbp]
 \centering
 %\caption{My caption}
 %\label{my-label}
