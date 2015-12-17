@@ -56,7 +56,7 @@ void test(void *p,Data dt){
 
   BST bst = (BST) p;
 
-  printf("INSERTION\n");
+  printf("INSERTION\ni\tSize[Bytes]\tTime[ms]\n");
   total = s = 0;
   for (size_t i = 4; i < 15; i++) {
     for (;s<(2<<i);s++) {
@@ -65,11 +65,10 @@ void test(void *p,Data dt){
       end = clock();
       total += end-start;
     }
-    printf("Size of Structure with 2^%i data is %i, index %i\n",i,size(bst->root),s);
-    printf("Mean Time spent INSERTING with 2^%i data is %f ms.\n",i,total/(2<<i));
+    printf("%i\t%i\t%f\n",i,size(bst->root),total/(2<<i));
   }
 
-  printf("SEARCH\n");
+  printf("SEARCH\ni\tTime[ms]\n");
   total = s = 0;
   for (size_t i = 4; i < 15; i++) {
     for (;s<(2<<i);s++) {
@@ -81,23 +80,22 @@ void test(void *p,Data dt){
 
       total += end-start;
     }
-    printf("Mean Time spent SEARCHING with 2^%i data is %f ms.\n",i,total/(2<<i));
+    printf("%i\t%f\n",i,total/(2<<i));
   }
 
-  printf("DELETION\n");
+  printf("DELETION\ni\tSize[Bytes]\tTime[ms]\n");
   total = s = 0;
   for (size_t i = 4; i < 15; i++) {
     for (;s<(2<<i);s++) {
       int r = rand() % dt->n;
-      
+
       start = clock();
       bst->root = bst->delete(bst->root,dt->str+dt->idx[r]);
       end = clock();
 
       total += end-start;
     }
-    printf("Size of Structure with 2^%i data is %i, index %i\n",i,size(bst->root),s);
-    printf("Mean Time spent DELETING with 2^%i data is %f ms.\n",i,total/(2<<i));
+    printf("%i\t%i\t%f\n",i,size(bst->root),total/(2<<i));
   }
 
 }
