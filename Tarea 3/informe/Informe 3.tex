@@ -124,13 +124,13 @@ Para este trabajo se compararon los siguientes tipos de diccionarios
 		sea rápida, al no realizar rebalanceos ni cambios extras al realizar operaciones.
 
 		A medida que aumente la cantidad de elementos, se espera que el tiempo de búsqueda e inserción
-		tenga forma logaritmica.
+		tenga forma logarítmica.
 
 	\subsection{Árbol AVL}
 		Como este árbol realiza re-balanceos, se espera que el tiempo de creación tome más tiempo que el
 		convencional.
 
-		Se espera que para una mayor cantidad de búsquedas, se comporte mejor que el anterior, al encontrarse más comprimido
+		Se espera que para una mayor cantidad de elementos, se comporte mejor que el anterior para todas las operaciones, al encontrarse más comprimido
 		 debido a los re-balanceos realizados (va a tener menor altura que el anterior, lo que significa un mejor peor caso).
 
 
@@ -139,10 +139,38 @@ Para este trabajo se compararon los siguientes tipos de diccionarios
 
 \section{Diseño e implementación}
 
+\newpage
 \section{Experimentos y resultados}
 
+	\begin{figure}[ht!]
+		\centering \includegraphics[scale=0.8]{img/ins-size.jpg}
+	\end{figure}
 
+	\begin{figure}[ht!]
+		\centering \includegraphics[scale=0.8]{img/ins-num.jpg}
+	\end{figure}
 
+\newpage
+
+	\begin{figure}[ht!]
+		\centering \includegraphics[scale=0.8]{img/srch-size.jpg}
+	\end{figure}
+
+	\begin{figure}[ht!]
+		\centering \includegraphics[scale=0.8]{img/srch-num.jpg}
+	\end{figure}
+
+\newpage
+
+	\begin{figure}[ht!]
+		\centering \includegraphics[scale=0.8]{img/del-size.jpg}
+	\end{figure}
+
+	\begin{figure}[ht!]
+		\centering \includegraphics[scale=0.8]{img/del-num.jpg}
+	\end{figure}
+
+\newpage
 \section{Análisis y Conclusiones}
 
 
