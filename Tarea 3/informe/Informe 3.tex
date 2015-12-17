@@ -41,7 +41,7 @@
 %------------------ TÍTULO -----------------------
 \vspace*{4cm}
 \begin{center}
-\Huge  {Tarea 1 - Diccionarios}\\
+\Huge  {Tarea 3 - Diccionarios}\\
 \vspace{1cm}
 \Large {CC4102 - Diseño y Análisis de Algoritmos}\\
 \end{center}
@@ -90,31 +90,52 @@
 % =============== SECCIONES Y SUBSECCIONES ===============
 \begin{abstract}
    En este trabajo se analizó 4 estructuras distintas para diccionarios, implementandolas,
-	 ejecutandolas para distintos casos y comparando para cada caso y diccionario los resultados obtenidos.
+	 ejecutandolas para distintos casos y comparando para uno su rendimiento ante inserciones, consultas y eliminaciones.
 \end{abstract}
 \section{Introducción}
 Para este trabajo se compararon los siguientes tipos de diccionarios
 	\begin{itemize}
 			\item Árbol de Busqueda Binaria convencional
 			\item Árbol AVL
-			\item Splay Tree
-			\item Árbol de Van Emde Boas
+		%	\item Splay Tree
 	\end{itemize}
-	\paragraph{} Árbol de Busqueda Binaria convencional
-	\paragraph{} Árbol AVL
-	\paragraph{} Splay Tree
-	\paragraph{} Árbol de Van Emde Boas
+	\paragraph{} Árbol de Busqueda Binaria convencional consiste en el árbol donde los elementos son agregados y eliminados a medida que
+	se pide, sin realizar ningún tipo de modificación u optimización cuando se hacen las operaciones.
+	\paragraph{} Árbol AVL revisa al momento de insertar o eliminar elementos si los hijos de cada nodo involucrado difieren en sus tamaños por
+	más de 1, en caso de ocurrir, realiza un rebalanceo de manera que se cumpla la condición
+	% \paragraph{} Splay Tree es un árbol en el cual al insertar o consultar por un elemento, este se sube a la raiz del árbol, por medio de
+	% rotaciones. También al eliminar un elemento se selecciona su mayor hijo del lado izquierdo o su menor del lado derecho y se sube a la
+	% raiz del árbol, usando el mismo método que en la inserción.
 
 
+ \paragraph{}Para cada estructura se realizaron los siguientes tests
+
+	\begin{itemize}
+			\item $2^{4}$ a $2^{14}$ inserciones
+			\item $2^{4}$ a $2^{15}$ búsquedas para las estructuras de mayor tamaño
+			\item $2^{4}$ a $2^{15}$ borrados
+	\end{itemize}
+
+\newpage
 \section{Hipótesis}
 
 	\subsection{Árbol de Busqueda Binaria convencional}
+		Se espera que para cantidades pequeñas de datos el tiempo de creación de esta estructura
+		sea rápida, al no realizar rebalanceos ni cambios extras al realizar operaciones.
+
+		A medida que aumente la cantidad de elementos, se espera que el tiempo de búsqueda e inserción
+		tenga forma logaritmica.
 
 	\subsection{Árbol AVL}
+		Como este árbol realiza re-balanceos, se espera que el tiempo de creación tome más tiempo que el
+		convencional.
 
-	\subsection{Splay Tree}
+		Se espera que para una mayor cantidad de búsquedas, se comporte mejor que el anterior, al encontrarse más comprimido
+		 debido a los re-balanceos realizados (va a tener menor altura que el anterior, lo que significa un mejor peor caso).
 
-	\subsection{Árbol de Van Emde Boas}
+
+
+%	\subsection{Splay Tree}
 
 \section{Diseño e implementación}
 
